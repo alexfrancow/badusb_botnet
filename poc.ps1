@@ -111,7 +111,7 @@ While ($DoNotExit)  {
 		Sleep -seconds 5
 		$DoNotExit = 0
 	  }
-       	"/list"  {
+      "/list"  {
         Invoke-WebRequest `
         -Uri ("https://api.telegram.org/bot{0}/sendMessage" -f $BotToken) `
         -Method Post `
