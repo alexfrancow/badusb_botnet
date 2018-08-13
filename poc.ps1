@@ -101,7 +101,7 @@ While ($DoNotExit)  {
 		$Message = "$($LastMessage.Message.from.first_name), I've ran <b>$($CommandToRun)</b> and this is the output:`n$CommandToRun_Result"
 		$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($Message)&parse_mode=html"
 	  }
-	  "quit_script"  {
+	  "/exit $ipV4"  {
 		#The user wants to stop the script
 		write-host "The script will end in 5 seconds"
 		$ExitMessage = "$($LastMessage.Message.from.first_name) has requested the script to be terminated. It will need to be started again in order to accept new messages!"
