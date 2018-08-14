@@ -111,13 +111,13 @@ While ($DoNotExit)  {
 		Sleep -seconds 5
 		$DoNotExit = 0
 	  }
-      "/list"  {
-        Invoke-WebRequest `
-        -Uri ("https://api.telegram.org/bot{0}/sendMessage" -f $BotToken) `
-        -Method Post `
-        -ContentType "application/json;charset=utf-8" `
-        -Body (ConvertTo-Json -Compress -InputObject $payload)
-      }
+      	  "/list"  {
+        	Invoke-WebRequest `
+        	  -Uri ("https://api.telegram.org/bot{0}/sendMessage" -f $BotToken) `
+        	  -Method Post `
+        	  -ContentType "application/json;charset=utf-8" `
+        	  -Body (ConvertTo-Json -Compress -InputObject $payload)
+      	  }
 	  default  {
 	    #The message sent is unknown
 		$Message = "Sorry $($LastMessage.Message.from.first_name), but I don't understand ""$($LastMessageText)""!"
