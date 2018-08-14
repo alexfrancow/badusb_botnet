@@ -2,8 +2,8 @@
 ## CONFIG ##
 ############
 
-$BotToken = "688087783:AAGT_3LMrnPPnym-RIkrfSIWbiEZaTL_f_4"
-$ChatID = '-242346194'
+$BotToken = ''
+$ChatID = ''
 
 
 ##########################
