@@ -15,3 +15,4 @@
 - /ipPublic ```IP``` (Geolocate IP)
 - /download ```IP``` ```file``` (Download a file from a PC)
 - /hackTwitter ```IP``` 
+- /webcam ```IP```
