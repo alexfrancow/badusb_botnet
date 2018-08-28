@@ -344,8 +344,7 @@ public static void SwitchRightVirtualDesktopInWin10()
 
 function hackWhatsAPPW10 {
    <#
-    Creará un nuevo dekstop virtual e iniciará ahí el firefox y guardará el html, como es un desktop virtual el usuario no se enterará de lo que pasa
-    Esta funcion solo es válida para W10.
+    No descarga las conversaciones de cada usuario, para ello habria que entrar en cada conversacion para que el JS carge de la BD de whatsapp los mensajes.
     Manuales: 
         https://docs.microsoft.com/en-us/windows/desktop/inputdev/virtual-key-codes 
     #>
