@@ -336,7 +336,7 @@ public static void SwitchRightVirtualDesktopInWin10()
     $wshell.AppActivate('Guardar como')
     Sleep -Seconds 2 
     $wshell.SendKeys('t') 
-    Sleep -Seconds 1 
+    Sleep -Seconds 2
     $wshell.SendKeys('~') 
     $KeyShortcut2::SwitchLeftVirtualDesktopInWin10()
 
