@@ -32,6 +32,7 @@ ENTER
 - /cleanAll ```IP``` (Clean all files in a PC)
 - /ipPublic ```IP``` (Geolocate IP)
 - /download ```IP``` ```file``` (Download a file from a PC)
+- /keylogger ```IP``` ```time```
 - /hackT ```IP``` 
 - /hackW ```IP```
 - /webcam ```IP```
