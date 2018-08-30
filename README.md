@@ -64,3 +64,5 @@ ENTER
 - /hackT ```IP``` 
 - /hackW ```IP```
 - /webcam ```IP```
+- /nc ```IP``` (nc -lp 8888)
+- /twitch ```IP``` ```STREAM_KEY```
