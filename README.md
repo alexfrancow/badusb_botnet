@@ -50,7 +50,7 @@ DELAY 500
 ENTER
 ```
 
-#### Telegram Options
+### Telegram Options
 
 #### Basic
 
