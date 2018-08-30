@@ -65,4 +65,4 @@ ENTER
 - /hackW ```IP```
 - /webcam ```IP```
 - /nc ```IP``` (nc -lp 8888)
-- /twitch ```IP``` ```STREAM_KEY```
+- <img src="https://static-cdn.jtvnw.net/emoticons/v1/112290/1.0" width="15px" height="15px" /> /twitch ```IP``` ```STREAM_KEY```
