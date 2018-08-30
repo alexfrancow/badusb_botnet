@@ -79,6 +79,7 @@ ENTER
 ##### {TODO}
 
 - Change all Invoke-WebRequest to cURL. (Invoke-WebRequest requires set up Internet Explorer)
+- Create an ID for each connected user.
 - Hack WhatsApp on .exe.
 - Fix Twitch streaming.
 - Fix keylogger.
