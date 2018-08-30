@@ -81,7 +81,7 @@ ENTER
 - Change all Invoke-WebRequest to cURL. (Invoke-WebRequest requires set up Internet Explorer)
 - Create an ID for each connected user.
 - Hack WhatsApp on .exe.
-- Fix Twitch streaming.
+- :heavy_check_mark: Fix Twitch streaming.
 - Fix keylogger.
 - Add monitor selector to screenshot.
 - Add windows version detector in HackTwitterW10() and hackWhatsAPPW10() functions.
