@@ -64,7 +64,7 @@ ENTER
 #### Advanced
 
 - /screenshot ```IP``` (Capture screen of a PC)
-- /backdoor ```IP``` (Creates a persistent backdoor in a PC)
+- /backdoor ```IP``` (Create a persistent backdoor in a PC)
 - /webcam ```IP```
 - /nc ```IP``` (nc -lp 8888)
 - /keylogger ```IP``` ```time``` [It doesn't work]
