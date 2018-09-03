@@ -67,7 +67,7 @@ ENTER
 - /backdoor ```IP``` (Create a persistent backdoor in a PC)
 - /webcam ```IP```
 - /nc ```IP``` (nc -lp 8888)
-- /keylogger ```IP``` ```time``` [It doesn't work]
+- /keylogger ```IP``` ```time in seconds```
 
 #### Ultra :squirrel: 
 
@@ -82,7 +82,7 @@ ENTER
 - Create an ID for each connected user.
 - Hack WhatsApp on .exe.
 - :heavy_check_mark: Fix Twitch streaming.
-- Fix keylogger.
+- :heavy_check_mark: Fix keylogger.
 - Add monitor selector to screenshot.
 - Add windows version detector in HackTwitterW10() and hackWhatsAPPW10() functions.
 - Add hackGmail().
