@@ -55,16 +55,16 @@ ENTER
 #### Basic
 
 - /list (List all devices availables)
-- /select ```IP``` ```command``` (Execute a command in a PC)
-- /stop ```IP``` (Stop remote connection with a PC)
-- /cleanAll ```IP``` (Clean all files in a PC)
+- /select ```IP``` ```command``` (Execute a command)
+- /stop ```IP``` (Stop remote connection)
+- /cleanAll ```IP``` (Clean all files)
 - /ipPublic ```IP``` (Geolocate IP)
-- /download ```IP``` ```file``` (Download a file from a PC)
+- /download ```IP``` ```file``` (Download a file from PC)
 
 #### Advanced
 
-- /screenshot ```IP``` (Capture screen of a PC)
-- /backdoor ```IP``` (Create a persistent backdoor in a PC)
+- /screenshot ```IP``` (Capture screen)
+- /backdoor ```IP``` (Create a persistent backdoor)
 - /webcam ```IP```
 - /nc ```IP``` (nc -lp 8888)
 - /keylogger ```IP``` ```time in seconds```
