@@ -86,4 +86,4 @@ ENTER
 - Add monitor selector to screenshot.
 - Add windows version detector in HackTwitterW10() and hackWhatsAPPW10() functions.
 - Add hackGmail().
-- Verbose via telegram messages.
+- :heavy_check_mark: Verbose via telegram messages.
