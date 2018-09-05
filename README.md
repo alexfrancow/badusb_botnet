@@ -95,4 +95,4 @@ ENTER
 - Add windows version detector in HackTwitterW10() and hackWhatsAPPW10() functions.
 - Add hackGmail().
 - :heavy_check_mark: Verbose via telegram messages.
-- Netcat connection reverse.
+- Netcat reverse connection.
