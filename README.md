@@ -1,7 +1,7 @@
 # badusb_botnet
 :smiling_imp::busts_in_silhouette: Infect a pc with badusb and establish a connection through telegram.
 
-> :warning: Configuration:
+:warning: Configuration:
 
 ```powershell
 ############
@@ -12,9 +12,9 @@ $BotToken = "<BOTTOKEN>"
 $ChatID = '<CHATID>'
 $githubScript = '<you_fork/poc.ps1>'
 ```
-*To create a telegram bot: https://core.telegram.org/bots#6-botfather*
+>*To create a telegram bot: https://core.telegram.org/bots#6-botfather*
 
-*To get ChatID: https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id*
+>*To get ChatID: https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id*
 
 ## Option 1
 
