@@ -13,6 +13,7 @@ $ChatID = '<CHATID>'
 $githubScript = '<you_fork/poc.ps1>'
 ```
 *To create a telegram bot: https://core.telegram.org/bots#6-botfather*
+*To see ChatID: https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id*
 
 ## Option 1
 
