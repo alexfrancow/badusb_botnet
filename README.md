@@ -39,6 +39,8 @@ DELAY 500
 ENTER
 ```
 
+> Link to convert to .ino: https://malduino.com/converter/
+
 ### Digispark
 
 ```c
@@ -99,7 +101,7 @@ DELAY 500
 ENTER
 ```
 
-> Link to convert those scripts to .ino: https://malduino.com/converter/
+> Link to convert to .ino: https://malduino.com/converter/
 
 ### Telegram Options
 
