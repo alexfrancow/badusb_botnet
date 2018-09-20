@@ -90,8 +90,8 @@ Windows Powershell is too slow at startup, so we can use cmd to download the '.p
 #### Syntax
 
 ```cmd
-bitsadmin /transfer myDownloadJob /download /priority normal http://downloadsrv/10mb.zip c:\10mb.zip
-certutil.exe -urlcache -split -f "https://download.sysinternals.com/files/PSTools.zip" pstools.zip
+> bitsadmin /transfer myDownloadJob /download /priority normal http://downloadsrv/10mb.zip c:\10mb.zip
+> certutil.exe -urlcache -split -f "https://download.sysinternals.com/files/PSTools.zip" pstools.zip
 ```
 ### Option 2.1: Simple
 
