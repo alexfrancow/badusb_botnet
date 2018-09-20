@@ -100,6 +100,10 @@ certutil.exe -urlcache -split -f "https://download.sysinternals.com/files/PSTool
 
 ## Example on digispark
 
+<p align="center">
+    <img src="https://img.staticbg.com/thumb/large/oaupload/banggood/images/78/0D/5586c82c-2791-44cf-baa6-3ebc5882ac2e.jpg" height="100px" width="100px"/>
+</p>
+
 ```c
 #define kbd_es_es
 #include "DigiKeyboard.h"
