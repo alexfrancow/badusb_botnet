@@ -150,11 +150,11 @@ for (;;) {
 }
 ```
 
-> Get the drivers: https://github.com/digistump/DigistumpArduino/releases
+- Get the drivers: https://github.com/digistump/DigistumpArduino/releases
 
-> Additional Board Manager URL: https://raw.githubusercontent.com/digistump/arduino-boards-index/master/package_digistump_index.json
+- Additional Board Manager URL: https://raw.githubusercontent.com/digistump/arduino-boards-index/master/package_digistump_index.json
 
-> DigiKeyboard Source Code: https://github.com/digistump/DigisparkArduinoIntegration/blob/master/libraries/DigisparkKeyboard/DigiKeyboard.h
+- DigiKeyboard Source Code: https://github.com/digistump/DigisparkArduinoIntegration/blob/master/libraries/DigisparkKeyboard/DigiKeyboard.h
 
 > Keyboard en_US to es_ES: https://github.com/ernesto-xload/DigisparkKeyboard
 Decompress the archive and put all in : ```C:\Users\Administrador\AppData\Local\Arduino15\packages\digistump\hardware\avr\1.6.7\libraries\DigisparkKeyboard```, later in the script you must put the following line to specify the keyboard layout.
