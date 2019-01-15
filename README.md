@@ -219,7 +219,7 @@ void loop() {
 }
 ```
 
-* We use the \" to scape the double quotes in Arduino code.
+We use the ```\"``` to scape the double quotes in Arduino code.
 
 ### Telegram Options
 
